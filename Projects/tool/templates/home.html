@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home page</title>
+
+    <style>
+        body{
+            background-image: url('{%static "images/alzheimers.png"%}');
+            background-size: cover;
+        }
+        .center{
+            background-color:rgb(112, 111, 115);
+            height: 250px;
+            width:500px;
+            margin: auto;
+            margin-top: 200px;
+            border-radius: 10px;
+            box-shadow: 10px 10px 10px;
+        }
+        .heading{
+            text-align: center;
+            font-size:30px;
+            font-family: 'Times New Roman', Times, serif;
+            color: aliceblue;
+            padding: 10px;
+        }
+        .name{
+            margin: 10px 5px 5px 10px;
+        }
+        #name{
+            margin-left:10px ;
+        }
+        #age{
+            margin-left:10px ;
+        } 
+        #date{
+            margin-left:10px ;
+        }
+        #number{
+            margin-left:10px ;
+        }
+        #label{
+            color: aliceblue;
+        }
+       .form{
+        padding: 10px 20px 0px 25px;
+       }
+    </style>
+</head>
+<body>
+    <div class="center">
+        <div class="heading">
+            Screening tool for Dementia Patients
+        </div>
+        <div class="form">
+            <form action="questions_to_answer" method="post">
+                <div class="name">
+                    {% csrf_token %}
+                    <label for="name" id="label">ENTER PATIENT NAME: *</label>
+                    <input type="text" placeholder="patient name" name="name" id="name" required >
+                </div>
+
+                <div class="name">
+                    {% csrf_token %}
+                    <label for="age" id="label">PATIENT-AGE: *</label>
+                    <input type="number" placeholder="age" name="age" id="age" required min="1" max="100">
+                </div>
+
+                <div class="name">
+                    {% csrf_token %}
+                    <label for="date" id="label">DATE: *</label>
+                    <input type="date" name="date" id="date" required>
+                </div>
+                <div class="name">
+                    {% csrf_token %}
+                    <label for="number" id="label">ENTER PATIENT NUMBER: *</label>
+                    <input type="tel" placeholder="contact-number" name="number" id="number" required pattern="[0-9]{10}">
+                </div>
+                <div class="name">
+                    {% csrf_token %}
+                    <label for="submit" id="label">Click here to check your dementia:</label>
+                    <button id="submit" name="submit">Click-here</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

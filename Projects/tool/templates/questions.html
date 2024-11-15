@@ -1,0 +1,200 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+            background-image: url('{%static "images/bg-questions.jpg" %}');
+            background-size: cover;
+        }
+
+        .form{
+            height: 1300px;
+            width: 1200px;
+            background-color:rgba(47, 187, 222, 0.5);
+            box-shadow: 10px 10px 10px;
+            border-radius: 10px;
+            margin: 20px 100px 20px 150px;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .wishing{
+            text-align: center;
+            margin: 10px 0px 0px 10px;
+            font-size: 50px;
+        }
+        .details{
+            margin: 0px 0px 0px 20px;
+        }
+
+        .q{
+            margin:10px 0px 10px 20px;
+        }
+        .check{
+            margin: 25px 0px 0px 300px;
+            height: 50px;
+            width: 500px;
+            text-align: center;
+            font-size: 30px;
+            background-color: black;
+            color:aqua;
+            border-color:aqua;
+            font-size:15px;
+        }
+
+        .check:hover{
+            background-color:aqua;
+            color: white;
+        }
+        .check:active{
+            opacity: 0.5;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="form">
+        <p class="wishing">Hello...{{patient_details.patient_name}}</p>
+        <div class="details">
+            <h2>Date : {{patient_details.date}}<br>Patient-Age : {{patient_details.patient_age}}</h2>
+        </div>
+        <form action="checking_of_dementia" method="post">
+            <div class="q">
+                <label for="q1">Does {{patient_details.patient_name}} have delusions, e.g., claims to have had valuables stolen ?</label> 
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q1" required value="yes">Yes.
+                <input type="radio" name="q1" required>No.
+                <input type="radio" name="q1" required>N/A.
+            </div>
+            <div class="q">
+                <label for="q2">Does {{patient_details.patient_name}} have illusions, e.g., sees something that isn't there ?</label> 
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q2" required>Yes.
+                <input type="radio" name="q2" required value="no">No.
+                <input type="radio" name="q2" required>N/A.
+            </div>
+            <div class="q">
+                <label for="q3">Does {{patient_details.patient_name}} have changed sleep patterns ?</label> 
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q3" required>Yes.
+                <input type="radio" name="q3" required>No.
+            </div>
+            <div class="q">
+                <label for="q4">Does {{patient_details.patient_name}} wakes up at night ?</label> 
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q4" required>Yes.
+                <input type="radio" name="q4" required>No.
+            </div>
+            <div class="q">
+                <label for="q5">Does {{patient_details.patient_name}} sleeps during the day ?</label> 
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q5" required>Yes.
+                <input type="radio" name="q5" required>No.
+            </div>
+            <div class="q">
+                <label for="q6">Does {{patient_details.patient_name}} wanders at night ?</label> 
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q6" required>Yes.
+                <input type="radio" name="q6" required>No.
+            </div>
+            <div class="q">
+                <label for="q7">Is there any difficulty for {{patient_details.patient_name}} while reading?</label> 
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q7" required>Yes.
+                <input type="radio" name="q7" required>No.
+            </div>
+            <div class="q">
+                <label for="q8">Does {{patient_details.patient_name}} find it difficult to follow simple instructions ?</label> 
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q8" required>Yes.
+                <input type="radio" name="q8" required>No.
+            </div>
+            <div class="q">
+                <label for="q9">Does {{patient_details.patient_name}} follow more than one instructions ?</label> 
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q9" required>Yes.
+                <input type="radio" name="q9" required>No.
+            </div>
+            <div class="q">
+                <label for="q10">Does {{patient_details.patient_name}} stop in the middle of the task ?</label> 
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q10" required>Yes.
+                <input type="radio" name="q10" required>No.
+            </div>
+            <div class="q">
+                <label for="q11">Does {{patient_details.patient_name}} speaks to himself ?</label> 
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q11" required>Yes.
+                <input type="radio" name="q11" required>No.
+            </div>
+
+            <div class="q">
+                <label for="q12">Does {{patient_details.patient_name}} have trouble making decisions even for everyday things such as what to eat, clothes to wear, making plans with family/friends, what to read?</label>
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q12" required>Yes.
+                <input type="radio" name="q12" required>No.
+            </div>
+            <div class="q">
+                <label for="q13">Does {{patient_details.patient_name}} forget the names of familiar objects and use general phrases such as 'you know what I mean' or 'that thing'?*</label>
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q13" required>Yes.
+                <input type="radio" name="q13" required>No.
+            </div>
+            <div class="q">
+                <label for="q14">Does {{patient_details.patient_name}} get easily confused driving, or using tools?</label>
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q14" required>Yes.
+                <input type="radio" name="q14" required>No.
+            </div>
+            <div class="q">
+                <label for="q15">Does {{patient_details.patient_name}} get lost in places that are familiar to you (i.e. your neighborhood or the grocery store)?*</label>
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q15" required>Yes.
+                <input type="radio" name="q15" required>No.
+            </div>
+            <div class="q">
+                <label for="q16">Does {{patient_details.patient_name}} have any problem while sleeping( like wakes at night ,unable to sleep)?</label>
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q16" required>Yes.
+                <input type="radio" name="q16" required>No.
+            </div>
+            <div class="q">
+                <label for="q17">Does {{patient_details.patient_name}} find that {{patient_details.patient_name}} miss social cues, which may lead to not understanding what others are saying, laughing at inappropriate times, staying on a topic despite a lack of interest by others, and/or saying things that are viewed as offensive?*</label>
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q17" required>Yes.
+                <input type="radio" name="q17" required>No.
+            </div>
+            <div class="q">
+                <label for="q18">Does {{patient_details.patient_name}}  get confused with recalling the day of the week, month, year, important dates, and/or does {{patient_details.patient_name}} repeat yourself in conversations? *</label>
+                <br>
+                {% csrf_token %}
+                <input type="radio" name="q18" required>Yes.
+                <input type="radio" name="q18" required>No.
+            </div>
+            <button class="check">Check whether {{patient_details.patient_name}} have dementia or not </button>
+        </form>
+    </div>
+</body>
+</html>
