@@ -1,0 +1,53 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory and Orientation Test</title>
+</head>
+<body>
+    <h2 id="test_name" name="test_name" value="Abbreviated Mental State Test(amst)">Memory and Orientation Test</h2>    
+    <form id="testForm">
+        <label>1. What is your age?</label><br>
+        <input type="number" id="age" required><br><br>
+
+        <label>2. What is the time to the nearest hour?</label><br>
+        <input type="text" id="time" required><br><br>
+
+        <label>3. Remember this address: 42 West Street. You will be asked to repeat it later.</label><br><br>
+
+        <label>4. What is the year?</label><br>
+        <input type="number" id="year" required><br><br>
+
+        <label>5. What is the name of the hospital or number of the residence where the patient is situated?</label><br>
+        <input type="text" id="location" required><br><br>
+
+        <label>6. Can you recognize two people (e.g., the doctor, nurse, or home help)?</label><br>
+        <input type="text" id="recognizePeople" required><br><br>
+
+        <label>7. What is your date of birth? (day and month are sufficient)</label><br>
+        <input type="text" id="dob" placeholder="DD/MM" required><br><br>
+
+        <label>8. In what year did World War 1 begin?</label><br>
+        <input type="number" id="ww1" required><br><br>
+
+        <label>9.Where does the sun rise?</label><br>
+        <input type="text" id="leader" required><br><br>
+
+        <label>10. Enter the Numberbackwards from 20 down to 1</label><br>
+        <input type="text" id="countBackwards" required><br><br>
+
+        <label>11.Now, repeat the address you were asked to remember.</label><br>
+        <input type="text" id="repeatAddress" placeholder="42 West Street" required><br><br>
+
+        <button type="button" onclick="checkAnswers()">Submit</button>
+
+    </form>
+
+    <p id="result"></p>
+
+
+</body>
+
+</html>

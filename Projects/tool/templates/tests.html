@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Information</title>
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background-color: #7f8c8d;
+            width: 500px;
+            margin: auto;
+            margin-top: 100px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        h2 {
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        #doctor_name,#additional_tests{
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1c5987;
+        }
+        .test{
+            margin: 0%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Doctor Information</h2>
+        <form action="test_taken" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="doctor_name">Doctor's Name *</label>
+                <input type="text" id="doctor_name" name="doctor_name" placeholder="Enter doctor's name" required>
+            </div>
+            <div class="form-group">
+                <label for="test">Select the Test to be performed.</label>
+                {% csrf_token %}
+                <input type="radio" name="test" required value="mmse">Mini-Mental State Examination(mmse).<br>
+                <input type="radio" name="test" required value="amst">Abbreviated Mental State Test(amst).
+            </div>
+            <div class="form-group">
+                <label for="additional_tests">Additional Tests (if any)</label>
+                <textarea id="additional_tests" name="additional_tests" placeholder="List any other tests suggested by the doctor" rows="3"></textarea>
+            </div>
+            <button type="submit">Submit Test Suggestions</button>
+        </form>
+    </div>
+</body>
+</html>

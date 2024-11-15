@@ -1,21 +1,25 @@
 from django.shortcuts import render
-
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from .models import Details
 from .models import Answers
+from .models import DoctorInfo
 # Create your views here.
 def home(request):
     return render(request,'home.html')
 
 def questions(request):
     
-    details = Details()
-    details.patient_name=request.POST['name']
-    details.patient_age=int(request.POST['age'])
-    details.date=request.POST['date']
-    details.mobile_num=request.POST['number']
+    details = Details(
+        patient_name=request.POST['name'],
+        patient_age=int(request.POST['age']),
+        date=request.POST['date'],
+        mobile_num=request.POST['number']
+    )
+    
+    details.save()
 
-
-    return render(request,'questions.html' , {'patient_details' : details })
+    return render(request,'tests.html' , {'patient_details' : details })
 
 def checking(request):
 
@@ -48,15 +52,60 @@ def checking(request):
                 answers.ans7,
                 answers.ans8,
                 answers.ans9,
-                answers.ans10 ,
-                answers.ans11 ,
-                answers.ans12 ,
-                answers.ans13 ,
-                answers.ans14 ,
-                answers.ans15 ,
-                answers.ans16 ,
-                answers.ans17 ,
-                answers.ans18 ,
+                answers.ans10,
+                answers.ans11,
+                answers.ans12,
+                answers.ans13,
+                answers.ans14,
+                answers.ans15,
+                answers.ans16,
+                answers.ans17,
+                answers.ans18,
 ]
     
     return render(request,'result.html' , {'answers_list': ans_list})
+
+def amst_test(request):
+    ans=Answers()
+    if request.method == "POST":
+        ans.test_name=request.POST.get('test_name')
+        ans.age = request.POST.get('age')
+        ans.time = request.POST.get('time')
+        ans.year = request.POST.get('year')
+        ans.location = request.POST.get('location')
+        ans.recognize_people = request.POST.get('recognizePeople')
+        ans.dob = request.POST.get('dob')
+        ans.ww1 = request.POST.get('ww1')
+        ans.count_backwards = request.POST.get('countBackwards')
+        ans.repeat_address = request.POST.get('repeatAddress')
+        
+        responses = {
+            "test_name":ans.test_name,
+            'age': ans.age,
+            'time': ans.time,
+            'year': ans.year,
+            'location': ans.location,
+            'recognize_people': ans.recognize_people,
+            'dob': ans.dob,
+            'ww1': ans.ww1,
+            'count_backwards': ans.count_backwards,
+            'repeat_address': ans.repeat_address
+        }
+        return render(request, 'test_result.html',{'responses':responses})
+
+def test_taken(request):
+    if request.method == 'POST':
+        doctor_name = request.POST.get('doctor_name')
+        test = request.POST.get('test')  
+        additional_tests = request.POST.get('additional_tests')
+
+        doctorinfo = {
+            'doctor_name': doctor_name,
+            'test': test,
+            'additional_tests': additional_tests
+        }
+
+        if test=='mmse': 
+            return render(request, 'mmse.html', doctorinfo)
+        elif test=="amst":
+            return render(request, 'amst.html', doctorinfo) 
