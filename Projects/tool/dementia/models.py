@@ -1,12 +1,21 @@
 from django.db import models
 
 # Create your models here.
-class Details:
 
-    patient_name : str
-    patient_age : int
-    date : str
-    mobile_num : int
+class Details(models.Model):
+    patient_name = models.CharField(max_length=100)
+    patient_age = models.IntegerField()
+    date = models.DateField()
+    mobile_num = models.CharField(max_length=15)
+
+    def __str__(self):
+        return self.patient_name
+# class Details:
+
+#     patient_name : str
+#     patient_age : int
+#     date : str
+#     mobile_num : int
 
 class Answers:
 
@@ -45,5 +54,6 @@ class DoctorInfo(models.Model):
     test = models.CharField(max_length=255)  # To store MMSE, AMST, etc.
     additional_tests = models.TextField(blank=True, null=True)
 
+    
     def __str__(self):
         return f"Doctor: {self.doctor_name}, Tests: {self.tests}"
