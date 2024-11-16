@@ -32,17 +32,6 @@ class Answers:
     ans17 : bool
     ans18 : bool
 
-    test_name: str
-    age: int
-    time: str
-    year: int
-    location: str
-    recognize_people: str
-    dob: str
-    ww1: int
-    count_backwards: str
-    repeat_address: str
-
 class DoctorInfo(models.Model):
     doctor_name = models.CharField(max_length=100)
     test = models.CharField(max_length=255)  # To store MMSE, AMST, etc.
@@ -51,3 +40,18 @@ class DoctorInfo(models.Model):
     
     def __str__(self):
         return f"Doctor: {self.doctor_name}, Tests: {self.tests}"
+
+class AmstAnswers(models.Model):
+    test_name = models.CharField(max_length=255)
+    age = models.IntegerField()
+    time = models.CharField(max_length=50)
+    year = models.IntegerField()
+    location = models.CharField(max_length=255)
+    recognize_people = models.CharField(max_length=255)
+    dob = models.CharField(max_length=20)
+    ww1 = models.IntegerField()
+    count_backwards = models.CharField(max_length=255)
+    repeat_address = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.test_name} - {self.age}"

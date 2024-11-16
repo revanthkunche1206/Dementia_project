@@ -2,9 +2,11 @@ from django.shortcuts import render
 from django.urls import reverse
 from .models import Details
 from .models import Answers
+from .models import AmstAnswers
 from .models import DoctorInfo
-
+from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
+
 # Create your views here.
 def home(request):
     return render(request,'home.html')
@@ -67,41 +69,48 @@ def checking(request):
     return render(request,'result.html' , {'answers_list': ans_list})
 
 def amst_test(request):
-    ans=Answers(
-        test_name=request.POST.get('test_name'),
-        age = request.POST.get('age'),
-        time = request.POST.get('time'),
-        year = request.POST.get('year'),
-        location = request.POST.get('location'),
-        recognize_people = request.POST.get('recognizePeople'),
-        dob = request.POST.get('dob'),
-        ww1 = request.POST.get('ww1'),
-        count_backwards = request.POST.get('countBackwards'),
-        repeat_address = request.POST.get('repeatAddress'),
-    )
-    amst_age = int(request.POST.get('age'))
-    patient_name = request.POST.get('patient_name')  
-    patient_details = get_object_or_404(Details, patient_name=patient_name)
+        ans = AmstAnswers(
+            test_name=request.POST.get('test_name'),
+            age=int(request.POST.get('age')),
+            time=request.POST.get('time'),
+            year=int(request.POST.get('year')),
+            location=request.POST.get('location'),
+            recognize_people=request.POST.get('recognizePeople'),
+            dob=request.POST.get('dob'),
+            ww1=int(request.POST.get('ww1')),
+            count_backwards=request.POST.get('countBackwards'),
+            repeat_address=request.POST.get('repeatAddress')
+        )
+        
+        ans.save()
+        
+        patient_name = request.POST.get('patient_name')
+        try:
+            patient_details = Details.objects.get(patient_name=patient_name)
+            match_message = (
+                "The age matches with the entered details."
+                if ans.age == patient_details.patient_age
+                else "The age does not match the entered details."
+            )
+        except Details.DoesNotExist:
+            match_message = "No patient details found."
 
-    if amst_age == patient_details.patient_age:
-        match_message = "The age matches with the entered details."
-    else:
-        match_message = "The age does not match the entered details."
-
-
-    return render(request, 'test_result.html',{'responses':ans, 'match_message':match_message})
+        return render(request, 'test_result.html', {'responses': ans, 'match_message': match_message})
 
 def test_taken(request):
-    doctor_details=DoctorInfo(
-        doctor_name = request.POST.get('doctor_name'),
-        test = request.POST.get('test'),  
-        additional_tests = request.POST.get('additional_tests'),
+    doctor_details = DoctorInfo(
+        doctor_name=request.POST.get('doctor_name'),
+        test=request.POST.get('test'),
+        additional_tests=request.POST.get('additional_tests'),
     )
-
-    flag=request.POST.get('test'), 
     doctor_details.save()
 
-    if flag=='mmse': 
-        return render(request, 'mmse.html', doctor_details)
-    elif flag=="amst":
-        return render(request, 'amst.html', doctor_details) 
+    patient_name = request.POST.get('patient_name') 
+
+    flag = request.POST.get('test') 
+    if flag == 'mmse': 
+        return render(request, 'mmse.html', {'doctor_details': doctor_details,'patient_name': patient_name})
+    elif flag == "amst":
+        return render(request, 'amst.html', {'doctor_details': doctor_details,'patient_name': patient_name})
+    else:
+        return HttpResponseBadRequest("Invalid test type provided.")
