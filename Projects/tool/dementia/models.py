@@ -10,12 +10,6 @@ class Details(models.Model):
 
     def __str__(self):
         return self.patient_name
-# class Details:
-
-#     patient_name : str
-#     patient_age : int
-#     date : str
-#     mobile_num : int
 
 class Answers:
 
