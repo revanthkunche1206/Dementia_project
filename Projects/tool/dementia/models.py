@@ -55,3 +55,29 @@ class AmstAnswers(models.Model):
 
     def __str__(self):
         return f"{self.test_name} - {self.age}"
+    
+class MmseAnswers(models.Model):
+    year = models.CharField(max_length=4)
+    season = models.CharField(max_length=20)
+    day = models.CharField(max_length=20)
+    month = models.CharField(max_length=20)
+    date = models.DateField()
+
+    state = models.CharField(max_length=50)
+    county = models.CharField(max_length=50)
+    town = models.CharField(max_length=50)
+    hospital = models.CharField(max_length=100)
+    floor = models.CharField(max_length=50)
+
+    memory = models.CharField(max_length=100)
+
+    backward = models.CharField(max_length=100)
+
+    recall = models.CharField(max_length=100)
+
+    objects_outside = models.CharField(max_length=100)
+
+    phrase = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"Assessment on {self.date} - {self.hospital}"

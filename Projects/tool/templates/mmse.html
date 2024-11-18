@@ -1,1 +1,146 @@
-<h1>hellllooo...........</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Patient Assessment</title>
+    <style>
+        body {
+            background-color: #eef2f3;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #217dbb;
+        }
+        .section-title {
+            font-size: 18px;
+            margin: 20px 0 10px;
+            color: #555;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Patient Online Assessment</h2>
+        <form action="mmse_test" method="post">
+            {% csrf_token %}
+
+            <div class="section-title">Orientation</div>
+            <div class="form-group">
+                <label for="year">What is the Year?</label>
+                <input type="text" id="year" name="year" placeholder="Enter the year" required>
+            </div>
+            <div class="form-group">
+                <label for="season">What is the Season?</label>
+                <input type="text" id="season" name="season" placeholder="Enter the season" required>
+            </div>
+            <div class="form-group">
+                <label for="day">What is the Day of the Week?</label>
+                <input type="text" id="day" name="day" placeholder="Enter the day of the week" required>
+            </div>
+            <div class="form-group">
+                <label for="month">What is the Month?</label>
+                <input type="text" id="month" name="month" placeholder="Enter the month" required>
+            </div>
+            <div class="form-group">
+                <label for="date">What is the Date?</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <div class="section-title">Location</div>
+            <div class="form-group">
+                <label for="state">State</label>
+                <input type="text" id="state" name="state" placeholder="Enter the state" required>
+            </div>
+            <div class="form-group">
+                <label for="county">County</label>
+                <input type="text" id="county" name="county" placeholder="Enter the county" required>
+            </div>
+            <div class="form-group">
+                <label for="town">Town/City</label>
+                <input type="text" id="town" name="town" placeholder="Enter the town/city" required>
+            </div>
+            <div class="form-group">
+                <label for="hospital">Hospital</label>
+                <input type="text" id="hospital" name="hospital" placeholder="Enter the hospital name" required>
+            </div>
+            <div class="form-group">
+                <label for="floor">Floor</label>
+                <input type="text" id="floor" name="floor" placeholder="Enter the floor" required>
+            </div>
+
+            <div class="section-title">Memory Recall</div>
+            <div class="form-group">
+                <label for="memory">Name 3 unrelated objects and remember them for later:</label>
+                <input type="text" id="memory" name="memory" placeholder="List 3 objects" required>
+            </div>
+
+            <div class="section-title">Counting</div>
+            <div class="form-group">
+                <label for="backward">Type your name backward:</label>
+                <input type="text" id="backward" name="backward" placeholder="Type your name backward" required>
+            </div>
+
+            <div class="section-title">Memory Recall (Later)</div>
+            <div class="form-group">
+                <label for="recall">Recall the 3 objects named earlier:</label>
+                <input type="text" id="recall" name="recall" placeholder="Recall the 3 objects" required>
+            </div>
+
+            <div class="section-title">Object Naming</div>
+            <div class="form-group">
+                <label for="objects">Please write the name of those items outside this room ie waiting room</label>
+                <input type="text" id="objects" name="objects" placeholder="Name the objects shown" required>
+            </div>
+
+            <div class="section-title">Phrase Repetition</div>
+            <div class="form-group">
+                <label for="phrase">
+                    Type the given statement in backward direction  *without the letter 'a'*: <br> 
+                    <strong>"An apple everyday keeps the doctor away."</strong>
+                </label>
+                <input type="text" id="phrase" name="phrase" placeholder="Type the statement here" required>
+            </div>
+
+            <button type="submit">Submit Assessment</button>
+        </form>
+    </div>
+</body>
+</html>

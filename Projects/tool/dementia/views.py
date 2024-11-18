@@ -3,6 +3,7 @@ from django.urls import reverse
 from .models import Details
 from .models import Answers
 from .models import AmstAnswers
+from .models import MmseAnswers
 from .models import DoctorInfo
 from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
@@ -68,34 +69,63 @@ def checking(request):
     
     return render(request,'result.html' , {'answers_list': ans_list})
 
-def amst_test(request):
-        ans = AmstAnswers(
-            test_name=request.POST.get('test_name'),
-            age=int(request.POST.get('age')),
-            time=request.POST.get('time'),
-            year=int(request.POST.get('year')),
-            location=request.POST.get('location'),
-            recognize_people=request.POST.get('recognizePeople'),
-            dob=request.POST.get('dob'),
-            ww1=int(request.POST.get('ww1')),
-            count_backwards=request.POST.get('countBackwards'),
-            repeat_address=request.POST.get('repeatAddress')
+def mmse_test(request):
+    if request.method == 'POST':
+         mmseans= MmseAnswers(
+            year=request.POST['year'],
+            season=request.POST['season'],
+            day=request.POST['day'],
+            month=request.POST['month'],
+            date=request.POST['date'],
+            state=request.POST['state'],
+            county=request.POST['county'],
+            town=request.POST['town'],
+            hospital=request.POST['hospital'],
+            floor=request.POST['floor'],
+            memory=request.POST['memory'],
+            backward=request.POST['backward'],
+            recall=request.POST['recall'],
+            objects_outside=request.POST['objects'],
+            phrase=request.POST['phrase']
         )
-        
+         mmseans.save()  
+         return render(request, 'test_result.html', {"Mmseans":mmseans})
+    
+def amst_test(request):
+    if request.method == "POST":
+        ans = AmstAnswers(
+            test_name=request.POST.get('test_name', ''),
+            age=int(request.POST.get('age', 0)),
+            time=request.POST.get('time', ''),
+            year=int(request.POST.get('year', 0)),
+            location=request.POST.get('location', ''),
+            recognize_people=request.POST.get('recognizePeople', ''),
+            dob=request.POST.get('dob', ''),
+            ww1=int(request.POST.get('ww1', 0)),
+            count_backwards=request.POST.get('countBackwards', ''),
+            repeat_address=request.POST.get('repeatAddress', '')
+        )
+        print(ans.test_name)
+        print(ans.age)
         ans.save()
-        
-        patient_name = request.POST.get('patient_name')
-        try:
-            patient_details = Details.objects.get(patient_name=patient_name)
-            match_message = (
-                "The age matches with the entered details."
-                if ans.age == patient_details.patient_age
-                else "The age does not match the entered details."
-            )
-        except Details.DoesNotExist:
-            match_message = "No patient details found."
 
-        return render(request, 'test_result.html', {'responses': ans, 'match_message': match_message})
+        patient_name = request.POST.get('patient_name')
+        match_message = "No patient details found."
+
+        if patient_name:
+            try:
+                patient_details = Details.objects.get(patient_name=patient_name)
+                if ans.age == patient_details.patient_age:
+                    match_message = "The age matches with the entered details."
+                else:
+                    match_message = "The age does not match the entered details."
+            except Details.DoesNotExist:
+                pass
+
+        context = {'responses': ans, 'match_message': match_message}
+        return render(request, 'test_result.html', context)
+
+    # return render(request, 'test_result.html', {'match_message': 'Invalid request method'})
 
 def test_taken(request):
     doctor_details = DoctorInfo(

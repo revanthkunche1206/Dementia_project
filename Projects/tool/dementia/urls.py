@@ -7,5 +7,5 @@ urlpatterns = [
     path('questions_to_answer',views.questions ,name='questions'),
     path('checking_of_dementia',views.checking,name='checking'),
     path('amst_test', views.amst_test, name='amst_test'),
-     
+    path('mmse_test', views.mmse_test, name='mmse_test'),
 ]
