@@ -4,6 +4,7 @@ from django.db import models
 
 class Details(models.Model):
     patient_name = models.CharField(max_length=100)
+    patient_dob = models.DateField()
     patient_age = models.IntegerField()
     date = models.DateField()
     mobile_num = models.CharField(max_length=15)
@@ -49,6 +50,7 @@ class AmstAnswers(models.Model):
     location = models.CharField(max_length=255)
     recognize_people = models.CharField(max_length=255)
     dob = models.CharField(max_length=20)
+    sunrise=models.CharField(max_length=20)
     ww1 = models.IntegerField()
     count_backwards = models.CharField(max_length=255)
     repeat_address = models.CharField(max_length=255)

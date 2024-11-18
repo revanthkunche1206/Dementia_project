@@ -7,50 +7,58 @@
     <title>Memory and Orientation Test</title>
 </head>
 <body>
-    <h2 id="test_name" name="test_name" value="Abbreviated Mental State Test(amst)">Memory and Orientation Test</h2>    
-    <form action="amst_test" method="post"  >
+    <h2>Memory and Orientation Test</h2>    
+    <form action="amst_test" method="post">
         {% csrf_token %}
-        <input type="hidden" name="patient_name" value="{{ patient_name }}">
-
+        <input type="hidden" id="test_name" name="test_name" value="Abbreviated Mental State Test(amst)">
+        
+        {% csrf_token %}
+        <input type="hidden" name="patient_name" value="{{patient_name }}">
+        
+        {% csrf_token %}
         <label>1. What is your age?</label><br>
         <input type="number" id="age" name="age" required><br><br>
-
+        
+        {% csrf_token %}
         <label>2. What is the time to the nearest hour?</label><br>
         <input type="text" id="time" name="time" required><br><br>
 
         <label>3. Remember this address: 42 West Street. You will be asked to repeat it later.</label><br><br>
 
+        {% csrf_token %}
         <label>4. What is the year?</label><br>
         <input type="number" id="year" name="year" required><br><br>
 
+        {% csrf_token %}
         <label>5. What is the name of the hospital or number of the residence where the patient is situated?</label><br>
         <input type="text" id="location" name="location" required><br><br>
 
+        {% csrf_token %}
         <label>6. Can you recognize two people (e.g., the doctor, nurse, or home help)?</label><br>
         <input type="text" id="recognizePeople" name="recognize_people" required><br><br>
 
-        <label>7. What is your date of birth? (day and month are sufficient)</label><br>
-        <input type="text" id="dob" name="dob" placeholder="DD/MM" required><br><br>
+        {% csrf_token %}
+        <label>7. What is your date of birth?</label><br>
+        <input type="date" id="dob" name="dob" required><br><br>
 
+        {% csrf_token %}
         <label>8. In what year did World War 1 begin?</label><br>
         <input type="number" id="ww1" name="ww1" required><br><br>
 
+        {% csrf_token %}
         <label>9.Where does the sun rise?</label><br>
-        <input type="text" id="leader" name="sunrise" required><br><br>
+        <input type="text" id="sunrise" name="sunrise" required><br><br>
 
-        <label>10. Enter the Numberbackwards from 20 down to 1</label><br>
-        <input type="text" id="countBackwards" name="count_backwards" required><br><br>
+        {% csrf_token %}
+        <label>10. Enter the Numberbackwards from 20 down to 1(space separated)</label><br>
+        <input type="textarea" id="countBackwards" name="countBackwards" required><br><br>
 
+        {% csrf_token %}
         <label>11.Now, repeat the address you were asked to remember.</label><br>
-        <input type="text" id="repeatAddress" name="repeat_address" placeholder="42 West Street" required><br><br>
+        <input type="text" id="repeatAddress" name="repeatAddress" required><br><br>
 
         <button type="submit" id="submit" name="submit">Submit</button>
-
     </form>
-
-    <p id="result"></p>
-
-
 </body>
 
 </html>

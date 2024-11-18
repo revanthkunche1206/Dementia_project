@@ -63,6 +63,7 @@
         <h2>Doctor Information</h2>
         <form action="test_taken" method="post">
             {% csrf_token %}
+            <input type="hidden" name="patient_name" value="{{ patient_details.patient_name }}">
             <div class="form-group">
                 <label for="doctor_name">Doctor's Name *</label>
                 <input type="text" id="doctor_name" name="doctor_name" placeholder="Enter doctor's name" required>

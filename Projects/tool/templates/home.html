@@ -65,6 +65,12 @@
 
                 <div class="name">
                     {% csrf_token %}
+                    <label for="dob" id="label">ENTER PATIENT DOB: *</label>
+                    <input type="date" name="dob" id="dob" required>
+                </div>
+
+                <div class="name">
+                    {% csrf_token %}
                     <label for="age" id="label">PATIENT-AGE: *</label>
                     <input type="number" placeholder="age" name="age" id="age" required min="1" max="100">
                 </div>
@@ -84,7 +90,7 @@
                     <label for="submit" id="label">Click here to check your dementia:</label>
                     <button id="submit" name="submit">Click-here</button>
                 </div>
-            </form>
+            </form> 
         </div>
     </div>
 </body>

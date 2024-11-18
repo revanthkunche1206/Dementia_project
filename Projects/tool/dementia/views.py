@@ -6,6 +6,7 @@ from .models import AmstAnswers
 from .models import MmseAnswers
 from .models import DoctorInfo
 from django.http import HttpResponseBadRequest
+from datetime import datetime
 from django.shortcuts import get_object_or_404
 
 # Create your views here.
@@ -16,13 +17,13 @@ def questions(request):
     
     details = Details(
         patient_name=request.POST['name'],
+        patient_dob=request.POST['dob'],
         patient_age=int(request.POST['age']),
         date=request.POST['date'],
         mobile_num=request.POST['number']
     )
     
     details.save()
-
     return render(request,'tests.html' , {'patient_details' : details })
 
 def checking(request):
@@ -72,60 +73,101 @@ def checking(request):
 def mmse_test(request):
     if request.method == 'POST':
          mmseans= MmseAnswers(
-            year=request.POST['year'],
-            season=request.POST['season'],
-            day=request.POST['day'],
-            month=request.POST['month'],
-            date=request.POST['date'],
-            state=request.POST['state'],
-            county=request.POST['county'],
-            town=request.POST['town'],
-            hospital=request.POST['hospital'],
-            floor=request.POST['floor'],
-            memory=request.POST['memory'],
-            backward=request.POST['backward'],
-            recall=request.POST['recall'],
-            objects_outside=request.POST['objects'],
-            phrase=request.POST['phrase']
+            year=request.POST.get('year', ''),
+            season=request.POST.get('season', ''),
+            day=request.POST.get('day', ''),
+            month=request.POST.get('month', ''),
+            date=request.POST.get('date', ''),
+            state=request.POST.get('state', ''),
+            county=request.POST.get('county', ''),
+            town=request.POST.get('town', ''),
+            hospital=request.POST.get('hospital', ''),
+            floor=request.POST.get('floor', ''),
+            memory=request.POST.get('memory', ''),
+            backward=request.POST.get('backward', ''),
+            recall=request.POST.get('recall', ''),
+            objects_outside=request.POST.get('objects', ''),
+            phrase=request.POST.get('phrase', '')
         )
          mmseans.save()  
          return render(request, 'test_result.html', {"Mmseans":mmseans})
     
 def amst_test(request):
     if request.method == "POST":
-        ans = AmstAnswers(
+        amstans = AmstAnswers(
             test_name=request.POST.get('test_name', ''),
             age=int(request.POST.get('age', 0)),
-            time=request.POST.get('time', ''),
+            time=int(request.POST.get('time', '')),
             year=int(request.POST.get('year', 0)),
             location=request.POST.get('location', ''),
             recognize_people=request.POST.get('recognizePeople', ''),
             dob=request.POST.get('dob', ''),
+            sunrise=str(request.POST.get('sunrize','')),
             ww1=int(request.POST.get('ww1', 0)),
             count_backwards=request.POST.get('countBackwards', ''),
-            repeat_address=request.POST.get('repeatAddress', '')
+            repeat_address=str(request.POST.get('repeatAddress', ''))
         )
-        print(ans.test_name)
-        print(ans.age)
-        ans.save()
+        amstans.save()
 
-        patient_name = request.POST.get('patient_name')
+        current_hour = datetime.now().hour
+        current_year = datetime.now().year
+        patient_name = request.POST.get('patient_name') 
         match_message = "No patient details found."
-
+        print(str(amstans.count_backwards))
         if patient_name:
             try:
                 patient_details = Details.objects.get(patient_name=patient_name)
-                if ans.age == patient_details.patient_age:
+                if amstans.age == patient_details.patient_age:
                     match_message = "The age matches with the entered details."
                 else:
                     match_message = "The age does not match the entered details."
             except Details.DoesNotExist:
                 pass
 
-        context = {'responses': ans, 'match_message': match_message}
+        if amstans.time==current_hour:
+            match_time = "The time matches with the current time."
+        else:
+            match_time = "The time does not match the current time."
+
+        
+        if amstans.year==current_year:
+            match_year = "The year matches with the current year."
+        else:
+            match_year = "The year does not match the current year."
+
+        
+        if str(amstans.dob)==str(patient_details.patient_dob):
+            match_dob = "The date of birth matches with the entered details."
+        else:
+            match_dob = "The date of birth does not match the entered details."
+
+        if amstans.ww1==1914:
+            match_ww1 = "The year of WW1 matches with the entered details."
+        else:
+            match_ww1 = "The year of WW1 does not match the entered details."
+
+        if amstans.count_backwards=="20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1":
+            match_count_backwards = "The count backwards matches with the entered details."
+        else:
+            match_count_backwards = "The count backwards does not match the entered details."
+        
+        amstans.repeat_address=(amstans.repeat_address).lower()
+        repaddress=""
+        for i in amstans.repeat_address:
+            if i!=" ":
+                repaddress+=i
+        if repaddress=="42weststreet":
+            match_address = "The address matches with the entered details."
+        else:
+            match_address = "The address does not match the entered details."
+        if amstans.sunrise=="east":
+            match_sunrise = "The sunrise direction matches with the entered details."
+        else:
+            match_sunrise = "The sunrise direction does not match the entered details."
+        context = {'responses': amstans, 'match_message': match_message,'time_message':match_time,'year_message':match_year,'dob_message':match_dob,'ww1_message':match_ww1,'count_message':match_count_backwards,'address_message':match_address,'sunrise_message':match_sunrise}
         return render(request, 'test_result.html', context)
 
-    # return render(request, 'test_result.html', {'match_message': 'Invalid request method'})
+        
 
 def test_taken(request):
     doctor_details = DoctorInfo(
@@ -136,7 +178,6 @@ def test_taken(request):
     doctor_details.save()
 
     patient_name = request.POST.get('patient_name') 
-
     flag = request.POST.get('test') 
     if flag == 'mmse': 
         return render(request, 'mmse.html', {'doctor_details': doctor_details,'patient_name': patient_name})
