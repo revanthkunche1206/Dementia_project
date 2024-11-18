@@ -72,24 +72,84 @@ def checking(request):
 
 def mmse_test(request):
     if request.method == 'POST':
+         mmse_points=0
          mmseans= MmseAnswers(
-            year=request.POST.get('year', ''),
+            test_name=request.POST.get('test_name', ''), 
+            year=int(request.POST.get('year', '')),
             season=request.POST.get('season', ''),
-            day=request.POST.get('day', ''),
+            day=str(request.POST.get('day', '')),
             month=request.POST.get('month', ''),
-            date=request.POST.get('date', ''),
+            date=int(request.POST.get('date', '')),
             state=request.POST.get('state', ''),
             county=request.POST.get('county', ''),
             town=request.POST.get('town', ''),
             hospital=request.POST.get('hospital', ''),
             floor=request.POST.get('floor', ''),
             memory=request.POST.get('memory', ''),
-            backward=request.POST.get('backward', ''),
+            name_backward=str(request.POST.get('backward', '')),
             recall=request.POST.get('recall', ''),
             objects_outside=request.POST.get('objects', ''),
             phrase=request.POST.get('phrase', '')
         )
-         mmseans.save()  
+         mmseans.save()
+
+         current_year = datetime.now().year
+         current_month = datetime.now().strftime("%B")
+         current_day = datetime.now().strftime("%A")
+         current_date = datetime.now().date()
+         patient_name = str(request.POST.get('patient_name'))
+         if mmseans.day==current_day:
+             mmse_points+=1
+        
+         if mmseans.year==current_year:
+             mmse_points+=1
+         
+         if mmseans.month==current_month:
+             mmse_points+=1
+        
+         if mmseans.date==current_date:
+             mmse_points+=1
+
+
+         current_season=""
+         if (current_month == 3 and current_date >= 15) or (current_month == 4) or (current_month == 5 and current_date <= 15):
+             current_season="spring"
+         elif (current_month == 5 and current_date >= 16) or (current_month == 6) or (current_month == 7 and current_date <= 15):
+            current_season="summer"
+         elif (current_month == 7 and current_date >= 16) or (current_month == 8) or (current_month == 9 and current_date <= 15):
+            current_season="monsoon"
+         elif (current_month == 9 and current_date >= 16) or (current_month == 10) or (current_month == 11 and current_date <= 15):
+            current_season="autumn"
+         elif (current_month == 11 and current_date >= 16) or (current_month == 12) or (current_month == 1) or (current_month == 2):
+            current_season="prewinter"
+         elif (current_month == 12 and current_date >= 16) or (current_month == 1 and current_date <= 31) or (current_month == 2 and current_date <= 15):
+            current_season="winter"
+         else:
+            current_season="Invalid date"
+         
+         if current_season==((mmseans.season).lower()):
+             mmse_points+=1
+         
+         
+         reversed_s = patient_name[::-1]
+         if reversed_s == ((mmseans.name_backward).lower()):
+             mmse_points+=1
+         
+
+         objects=(mmseans.memory).split()
+         objects=objects.sort()
+
+         recall_obj=(mmseans.recall).split()
+         recall_obj=recall_obj.sort()
+
+         if objects==recall_obj:
+             mmse_points+=1
+        
+         
+         obj_in_hall=["Chairs","benches","Wheelchairs","Television","Magazines","newspapers","Drinking water dispenser","Coffee/tea vending machine",
+                      "Trash bins","Charging stations for phones" ,"Indoor plants","Clocks","Patient registration desk","First aid kit station",
+                      "Hand sanitizer","CCTV cameras","Fire extinguishers"]
+         
          return render(request, 'test_result.html', {"Mmseans":mmseans})
     
 def amst_test(request):
@@ -114,6 +174,7 @@ def amst_test(request):
         patient_name = request.POST.get('patient_name') 
         match_message = "No patient details found."
         print(str(amstans.count_backwards))
+
         if patient_name:
             try:
                 patient_details = Details.objects.get(patient_name=patient_name)
@@ -160,6 +221,8 @@ def amst_test(request):
             match_address = "The address matches with the entered details."
         else:
             match_address = "The address does not match the entered details."
+        
+        amstans.sunrise=()
         if amstans.sunrise=="east":
             match_sunrise = "The sunrise direction matches with the entered details."
         else:

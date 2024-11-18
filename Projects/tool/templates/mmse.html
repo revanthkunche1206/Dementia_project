@@ -63,6 +63,13 @@
             {% csrf_token %}
 
             <div class="section-title">Orientation</div>
+
+            {% csrf_token %}
+            <input type="hidden" id="test_name" name="test_name" value="Minimal Mental State Test(mmst)">
+        
+            {% csrf_token %}
+            <input type="hidden" name="patient_name" value="{{patient_name }}">
+        
             <div class="form-group">
                 <label for="year">What is the Year?</label>
                 <input type="text" id="year" name="year" placeholder="Enter the year" required>
@@ -108,7 +115,7 @@
 
             <div class="section-title">Memory Recall</div>
             <div class="form-group">
-                <label for="memory">Name 3 unrelated objects and remember them for later:</label>
+                <label for="memory">Name 3 unrelated objects(space separated) and remember them for later:</label>
                 <input type="text" id="memory" name="memory" placeholder="List 3 objects" required>
             </div>
 
