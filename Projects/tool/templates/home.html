@@ -13,7 +13,7 @@
         }
         .center{
             background-color:rgb(112, 111, 115);
-            height: 250px;
+            height:auto;
             width:500px;
             margin: auto;
             margin-top: 200px;
@@ -84,6 +84,24 @@
                     {% csrf_token %}
                     <label for="number" id="label">ENTER PATIENT NUMBER: *</label>
                     <input type="tel" placeholder="contact-number" name="number" id="number" required pattern="[0-9]{10}">
+                </div>
+
+                <div class="name">
+                    {% csrf_token %}
+                    <label for="city" id="label">ENTER PATIENT TOWN/CITY: *</label>
+                    <input type="text" placeholder="town/city" name="city" id="city" required>
+                </div>
+                
+                <div class="name">
+                    {% csrf_token %}
+                    <label for="state" id="label">ENTER PATIENT STATE: *</label>
+                    <input type="text" placeholder="state" name="state" id="state" required>
+                </div>
+                
+                <div class="name">
+                    {% csrf_token %}
+                    <label for="country" id="label">ENTER PATIENT COUNTRY: *</label>
+                    <input type="text" placeholder="country" name="country" id="country" required>
                 </div>
                 <div class="name">
                     {% csrf_token %}

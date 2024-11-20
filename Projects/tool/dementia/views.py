@@ -20,7 +20,10 @@ def questions(request):
         patient_dob=request.POST['dob'],
         patient_age=int(request.POST['age']),
         date=request.POST['date'],
-        mobile_num=request.POST['number']
+        mobile_num=request.POST['number'],
+        town_city=request.POST['city'],
+        state=request.POST['state'],
+        country=request.POST['country']
     )
     
     details.save()
@@ -248,3 +251,4 @@ def test_taken(request):
         return render(request, 'amst.html', {'doctor_details': doctor_details,'patient_name': patient_name})
     else:
         return HttpResponseBadRequest("Invalid test type provided.")
+    

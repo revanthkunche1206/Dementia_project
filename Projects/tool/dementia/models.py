@@ -8,6 +8,10 @@ class Details(models.Model):
     patient_age = models.IntegerField()
     date = models.DateField()
     mobile_num = models.CharField(max_length=15)
+    town_city = models.CharField(max_length=100) 
+    state = models.CharField(max_length=100)      
+    country = models.CharField(max_length=100)    
+
 
     def __str__(self):
         return self.patient_name
