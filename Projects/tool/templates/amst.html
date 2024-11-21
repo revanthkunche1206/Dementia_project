@@ -7,7 +7,7 @@
     <title>Memory and Orientation Test</title>
 </head>
 <body>
-    <h2>Memory and Orientation Test</h2>    
+    <h2></h2>Abbreviated Mental State Test</h2>    
     <form action="amst_test" method="post">
         {% csrf_token %}
         <input type="hidden" id="test_name" name="test_name" value="Abbreviated Mental State Test(amst)">
@@ -35,7 +35,7 @@
 
         {% csrf_token %}
         <label>6. Can you recognize two people (e.g., the doctor, nurse, or home help)?</label><br>
-        <input type="text" id="recognizePeople" name="recognize_people" required><br><br>
+        <input type="text" id="recognizePeople" name="recognizePeople" required><br><br>
 
         {% csrf_token %}
         <label>7. What is your date of birth?</label><br>
@@ -57,7 +57,7 @@
         <label>11.Now, repeat the address you were asked to remember.</label><br>
         <input type="text" id="repeatAddress" name="repeatAddress" required><br><br>
 
-        <button type="submit" id="submit" name="submit">Submit</button>
+        <button type="submit">Submit</button>
     </form>
 </body>
 

@@ -8,7 +8,7 @@ class Details(models.Model):
     patient_age = models.IntegerField()
     date = models.DateField()
     mobile_num = models.CharField(max_length=15)
-    town_city = models.CharField(max_length=100) 
+    city = models.CharField(max_length=100) 
     state = models.CharField(max_length=100)      
     country = models.CharField(max_length=100)    
 
@@ -63,6 +63,7 @@ class AmstAnswers(models.Model):
         return f"{self.test_name} - {self.age}"
     
 class MmseAnswers(models.Model):
+    test_name = models.CharField(max_length=100)
     year = models.CharField(max_length=4)
     season = models.CharField(max_length=20)
     day = models.CharField(max_length=20)
@@ -77,7 +78,7 @@ class MmseAnswers(models.Model):
 
     memory = models.CharField(max_length=100)
 
-    backward = models.CharField(max_length=100)
+    name_backward = models.CharField(max_length=100)
 
     recall = models.CharField(max_length=100)
 

@@ -7,47 +7,88 @@
     <title>home page</title>
 
     <style>
-        body{
-            background-image: url('{%static "images/alzheimers.png"%}');
-            background-size: cover;
+        *,
+        *:before,
+        *:after {
+          box-sizing: border-box;
         }
-        .center{
-            background-color:rgb(112, 111, 115);
-            height:auto;
-            width:500px;
-            margin: auto;
-            margin-top: 200px;
-            border-radius: 10px;
-            box-shadow: 10px 10px 10px;
+        body {
+          padding: 1em;
+          font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-size: 15px;
+          color: #b9b9b9;
+          background-color: #e3e3e3;
         }
-        .heading{
-            text-align: center;
-            font-size:30px;
-            font-family: 'Times New Roman', Times, serif;
-            color: aliceblue;
-            padding: 10px;
+        .center {
+          max-width: 38em;
+          padding: 1em 3em 2em 3em;
+          margin: 0 auto;
+          background-color: #fff;
+          border-radius: 4.2px;
+          box-shadow: 0px 3px 10px -2px rgba(0, 0, 0, 0.2);
         }
-        .name{
-            margin: 10px 5px 5px 10px;
+        .heading {
+          text-align: center;
+          font-size: 1.5em;
+          color: #f0a500;
+          margin-bottom: 1em;
         }
-        #name{
-            margin-left:10px ;
+        .name {
+          margin-bottom: 1em;
         }
-        #age{
-            margin-left:10px ;
-        } 
-        #date{
-            margin-left:10px ;
+        label {
+          display: block;
+          margin-bottom: 0.5em;
+          color: #c8820a;
         }
-        #number{
-            margin-left:10px ;
+        input,
+        button {
+          width: 100%;
+          padding: 1em;
+          line-height: 1.4;
+          background-color: #f9f9f9;
+          border: 1px solid #e5e5e5;
+          border-radius: 3px;
+          -webkit-transition: 0.35s ease-in-out;
+          -moz-transition: 0.35s ease-in-out;
+          -o-transition: 0.35s ease-in-out;
+          transition: 0.35s ease-in-out;
+          transition: all 0.35s ease-in-out;
         }
-        #label{
-            color: aliceblue;
+        input:focus,
+        button:focus {
+          outline: none;
+          border-color: #bd8200;
         }
-       .form{
-        padding: 10px 20px 0px 25px;
-       }
+        button {
+          background-color: #f0a500;
+          color: #fff;
+          cursor: pointer;
+          border: none;
+          font-weight: bold;
+        }
+        button:hover {
+          background-color: #bd8200;
+        }
+        input[type="date"],
+        input[type="number"],
+        input[type="tel"],
+        input[type="text"] {
+          font-size: 15px;
+        }
+        
+        input::placeholder {
+          color: #b9b9b9;
+        }
+        form .name {
+          margin-bottom: 1.5em;
+        }
+        @media only screen and (max-width: 540px) {
+          .center {
+            padding: 1em 1.5em 1.5em 1.5em;
+          }
+        }
+        
     </style>
 </head>
 <body>
@@ -60,53 +101,53 @@
                 <div class="name">
                     {% csrf_token %}
                     <label for="name" id="label">ENTER PATIENT NAME: *</label>
-                    <input type="text" placeholder="patient name" name="name" id="name" required >
+                    <input type="text" placeholder="PATIENT NAME" name="name" id="name" required >
                 </div>
 
                 <div class="name">
                     {% csrf_token %}
                     <label for="dob" id="label">ENTER PATIENT DOB: *</label>
-                    <input type="date" name="dob" id="dob" required>
+                    <input type="date" name="dob" id="dob" placeholder="PATIENT DOB" required>
                 </div>
 
                 <div class="name">
                     {% csrf_token %}
                     <label for="age" id="label">PATIENT-AGE: *</label>
-                    <input type="number" placeholder="age" name="age" id="age" required min="1" max="100">
+                    <input type="number" placeholder="PATIENT AGE" name="age" id="age" required min="1" max="100">
                 </div>
 
                 <div class="name">
                     {% csrf_token %}
                     <label for="date" id="label">DATE: *</label>
-                    <input type="date" name="date" id="date" required>
+                    <input type="date" name="date" id="date" placeholder="DATE">
                 </div>
                 <div class="name">
                     {% csrf_token %}
                     <label for="number" id="label">ENTER PATIENT NUMBER: *</label>
-                    <input type="tel" placeholder="contact-number" name="number" id="number" required pattern="[0-9]{10}">
+                    <input type="tel" placeholder="CONTACT-NUMBER" name="number" id="number" required pattern="[0-9]{10}">
                 </div>
 
                 <div class="name">
                     {% csrf_token %}
                     <label for="city" id="label">ENTER PATIENT TOWN/CITY: *</label>
-                    <input type="text" placeholder="town/city" name="city" id="city" required>
+                    <input type="text" placeholder="TOWN/CITY" name="city" id="city" required>
                 </div>
                 
                 <div class="name">
                     {% csrf_token %}
                     <label for="state" id="label">ENTER PATIENT STATE: *</label>
-                    <input type="text" placeholder="state" name="state" id="state" required>
+                    <input type="text" placeholder="STATE" name="state" id="state" required>
                 </div>
                 
                 <div class="name">
                     {% csrf_token %}
                     <label for="country" id="label">ENTER PATIENT COUNTRY: *</label>
-                    <input type="text" placeholder="country" name="country" id="country" required>
+                    <input type="text" placeholder="COUNTRY" name="country" id="country" required>
                 </div>
                 <div class="name">
                     {% csrf_token %}
-                    <label for="submit" id="label">Click here to check your dementia:</label>
-                    <button id="submit" name="submit">Click-here</button>
+                    <label for="submit" id="label">Click here to Submit:</label>
+                    <button id="submit" name="submit">NEXT</button>
                 </div>
             </form> 
         </div>

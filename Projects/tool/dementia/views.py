@@ -21,7 +21,7 @@ def questions(request):
         patient_age=int(request.POST['age']),
         date=request.POST['date'],
         mobile_num=request.POST['number'],
-        town_city=request.POST['city'],
+        city=request.POST['city'],
         state=request.POST['state'],
         country=request.POST['country']
     )
@@ -75,164 +75,203 @@ def checking(request):
 
 def mmse_test(request):
     if request.method == 'POST':
-         mmse_points=0
-         mmseans= MmseAnswers(
+        mmse_points = 0
+
+        # Create and save the MMSE answers
+        mmseans = MmseAnswers(
             test_name=request.POST.get('test_name', ''), 
-            year=int(request.POST.get('year', '')),
-            season=request.POST.get('season', ''),
-            day=str(request.POST.get('day', '')),
-            month=request.POST.get('month', ''),
-            date=int(request.POST.get('date', '')),
-            state=request.POST.get('state', ''),
-            county=request.POST.get('county', ''),
-            town=request.POST.get('town', ''),
+            year=int(request.POST.get('year', '0')),
+            season=request.POST.get('season', '').lower(),
+            day=request.POST.get('day', '').lower(),
+            month=request.POST.get('month', '').capitalize(),
+            date=request.POST.get('date', ''),
+            state=request.POST.get('state', '').lower(),
+            county=request.POST.get('county', '').lower(),
+            town=request.POST.get('town', '').lower(),
             hospital=request.POST.get('hospital', ''),
             floor=request.POST.get('floor', ''),
-            memory=request.POST.get('memory', ''),
-            name_backward=str(request.POST.get('backward', '')),
-            recall=request.POST.get('recall', ''),
-            objects_outside=request.POST.get('objects', ''),
-            phrase=request.POST.get('phrase', '')
+            memory=request.POST.get('memory', '').lower(),
+            name_backward=request.POST.get('backward', '').lower(),
+            recall=request.POST.get('recall', '').lower(),
+            objects_outside=request.POST.get('objects', '').lower(),
+            phrase=request.POST.get('phrase', '').lower()
         )
-         mmseans.save()
+        mmseans.save()
 
-         current_year = datetime.now().year
-         current_month = datetime.now().strftime("%B")
-         current_day = datetime.now().strftime("%A")
-         current_date = datetime.now().date()
-         patient_name = str(request.POST.get('patient_name'))
-         if mmseans.day==current_day:
-             mmse_points+=1
+        # Current date-related info
+        current_year = datetime.now().year
+        month=datetime.now().month
+        current_month = datetime.now().strftime("%B")
+        current_day = datetime.now().strftime("%A").lower()
+        date = datetime.now().day
+        current_date=str(current_year)+"-"+str(month)+"-"+str(date)
+        patient_name = request.POST.get('patient_name', '')
+
+        # Check day, year, month, date correctness
+        if mmseans.day == current_day:
+            print("day true")
+            mmse_points += 1
+
+        if mmseans.year == current_year:
+            print("year true")
+            mmse_points += 1
+
+        if mmseans.month == current_month:
+            print("month true")
+            mmse_points += 1
+
+        print(current_date)
+        print(mmseans.date)
+        if mmseans.date == current_date:
+            print("date true")
+            mmse_points += 1
+
+        # Calculate current season
+        month_to_number = {
+            "January": 1, "February": 2, "March": 3, "April": 4, "May": 5,
+            "June": 6, "July": 7, "August": 8, "September": 9, "October": 10,
+            "November": 11, "December": 12
+        }
+        current_month_num = month_to_number[current_month]
+        current_season = ""
         
-         if mmseans.year==current_year:
-             mmse_points+=1
-         
-         if mmseans.month==current_month:
-             mmse_points+=1
-        
-         if mmseans.date==current_date:
-             mmse_points+=1
+        if (current_month_num == 3 and int(date) >= 15) or (4 <= current_month_num <= 5 and int(date) <= 15):
+            current_season = "spring"
+        elif (current_month_num == 5 and int(date) > 15) or (6 <= current_month_num <= 7 and int(date) <= 15):
+            current_season = "summer"
+        elif (current_month_num == 7 and int(date) > 15) or (8 <= current_month_num <= 9 and int(date) <= 15):
+            current_season = "monsoon"
+        elif (current_month_num == 9 and int(date) > 15) or (10 <= current_month_num <= 11 and int(date) <= 15):
+            current_season = "autumn"
+        else:
+            current_season = "winter"
 
+        if current_season == mmseans.season:
+            print("season true")
+            mmse_points += 1
 
-         current_season=""
-         if (current_month == 3 and current_date >= 15) or (current_month == 4) or (current_month == 5 and current_date <= 15):
-             current_season="spring"
-         elif (current_month == 5 and current_date >= 16) or (current_month == 6) or (current_month == 7 and current_date <= 15):
-            current_season="summer"
-         elif (current_month == 7 and current_date >= 16) or (current_month == 8) or (current_month == 9 and current_date <= 15):
-            current_season="monsoon"
-         elif (current_month == 9 and current_date >= 16) or (current_month == 10) or (current_month == 11 and current_date <= 15):
-            current_season="autumn"
-         elif (current_month == 11 and current_date >= 16) or (current_month == 12) or (current_month == 1) or (current_month == 2):
-            current_season="prewinter"
-         elif (current_month == 12 and current_date >= 16) or (current_month == 1 and current_date <= 31) or (current_month == 2 and current_date <= 15):
-            current_season="winter"
-         else:
-            current_season="Invalid date"
-         
-         if current_season==((mmseans.season).lower()):
-             mmse_points+=1
-         
-         
-         reversed_s = patient_name[::-1]
-         if reversed_s == ((mmseans.name_backward).lower()):
-             mmse_points+=1
-         
+        if patient_name[::-1].lower() == mmseans.name_backward:
+            print("name back true")
+            mmse_points += 1
 
-         objects=(mmseans.memory).split()
-         objects=objects.sort()
+        objects = sorted(mmseans.memory.split())
+        recall_obj = sorted(mmseans.recall.split())
 
-         recall_obj=(mmseans.recall).split()
-         recall_obj=recall_obj.sort()
+        if objects == recall_obj:
+            print("memory recall true")
+            mmse_points += 1
 
-         if objects==recall_obj:
-             mmse_points+=1
-        
-         
-         obj_in_hall=["Chairs","benches","Wheelchairs","Television","Magazines","newspapers","Drinking water dispenser","Coffee/tea vending machine",
-                      "Trash bins","Charging stations for phones" ,"Indoor plants","Clocks","Patient registration desk","First aid kit station",
-                      "Hand sanitizer","CCTV cameras","Fire extinguishers"]
-         
-         return render(request, 'test_result.html', {"Mmseans":mmseans})
+        try:
+            patient_details = Details.objects.get(patient_name=patient_name)
+            if mmseans.state == patient_details.state.lower():
+                print("state true")
+                mmse_points += 1
+            if mmseans.county == patient_details.country.lower():
+                print("country true")
+                mmse_points += 1
+            if mmseans.town == patient_details.city.lower():
+                print("city true")
+                mmse_points += 1
+        except Details.DoesNotExist:
+            print("Patient details not found")
+
+        return render(request, 'test_result.html', {"ans": mmseans, "points": mmse_points})
+
     
 def amst_test(request):
     if request.method == "POST":
         amstans = AmstAnswers(
             test_name=request.POST.get('test_name', ''),
             age=int(request.POST.get('age', 0)),
-            time=int(request.POST.get('time', '')),
+            time=int(request.POST.get('time', 0)),
             year=int(request.POST.get('year', 0)),
             location=request.POST.get('location', ''),
             recognize_people=request.POST.get('recognizePeople', ''),
             dob=request.POST.get('dob', ''),
-            sunrise=str(request.POST.get('sunrize','')),
+            sunrise=request.POST.get('sunrise', '').strip().lower(),
             ww1=int(request.POST.get('ww1', 0)),
-            count_backwards=request.POST.get('countBackwards', ''),
-            repeat_address=str(request.POST.get('repeatAddress', ''))
+            count_backwards=request.POST.get('countBackwards', '').strip(),
+            repeat_address=request.POST.get('repeatAddress', '').strip().lower()
         )
         amstans.save()
 
+        # Initialize variables
         current_hour = datetime.now().hour
         current_year = datetime.now().year
-        patient_name = request.POST.get('patient_name') 
+        patient_name = request.POST.get('patient_name')
         match_message = "No patient details found."
-        print(str(amstans.count_backwards))
+        amst_points = 0
 
+        # Retrieve patient details if provided
+        patient_details = None
         if patient_name:
             try:
                 patient_details = Details.objects.get(patient_name=patient_name)
                 if amstans.age == patient_details.patient_age:
+                    amst_points += 1
                     match_message = "The age matches with the entered details."
                 else:
                     match_message = "The age does not match the entered details."
             except Details.DoesNotExist:
                 pass
 
-        if amstans.time==current_hour:
-            match_time = "The time matches with the current time."
-        else:
-            match_time = "The time does not match the current time."
+        # Time match
+        match_time = "The time matches with the current time." if amstans.time == current_hour else "The time does not match the current time."
+        if amstans.time == current_hour:
+            amst_points += 1
 
-        
-        if amstans.year==current_year:
-            match_year = "The year matches with the current year."
-        else:
-            match_year = "The year does not match the current year."
+        # Year match
+        match_year = "The year matches with the current year." if amstans.year == current_year else "The year does not match the current year."
+        if amstans.year == current_year:
+            amst_points += 1
 
-        
-        if str(amstans.dob)==str(patient_details.patient_dob):
+        # DOB match
+        print(amstans.dob)
+        print(patient_details.patient_dob)
+        if amstans.dob == str(patient_details.patient_dob):
+            amst_points += 1
             match_dob = "The date of birth matches with the entered details."
         else:
             match_dob = "The date of birth does not match the entered details."
 
-        if amstans.ww1==1914:
-            match_ww1 = "The year of WW1 matches with the entered details."
-        else:
-            match_ww1 = "The year of WW1 does not match the entered details."
+        # WW1 match
+        match_ww1 = "The year of WW1 matches with the entered details." if amstans.ww1 == 1914 else "The year of WW1 does not match the entered details."
+        if amstans.ww1 == 1914:
+            amst_points += 1
 
-        if amstans.count_backwards=="20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1":
-            match_count_backwards = "The count backwards matches with the entered details."
-        else:
-            match_count_backwards = "The count backwards does not match the entered details."
-        
-        amstans.repeat_address=(amstans.repeat_address).lower()
-        repaddress=""
-        for i in amstans.repeat_address:
-            if i!=" ":
-                repaddress+=i
-        if repaddress=="42weststreet":
+        # Count backwards match
+        correct_count = "20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1"
+        match_count_backwards = "The count backwards matches with the entered details." if amstans.count_backwards == correct_count else "The count backwards does not match the entered details."
+        if amstans.count_backwards == correct_count:
+            amst_points += 1
+
+        # Repeat address match
+        sanitized_address = "".join(amstans.repeat_address.split())  # Remove spaces
+        if sanitized_address == "42weststreet":
+            amst_points += 1
             match_address = "The address matches with the entered details."
         else:
             match_address = "The address does not match the entered details."
-        
-        amstans.sunrise=()
-        if amstans.sunrise=="east":
-            match_sunrise = "The sunrise direction matches with the entered details."
-        else:
-            match_sunrise = "The sunrise direction does not match the entered details."
-        context = {'responses': amstans, 'match_message': match_message,'time_message':match_time,'year_message':match_year,'dob_message':match_dob,'ww1_message':match_ww1,'count_message':match_count_backwards,'address_message':match_address,'sunrise_message':match_sunrise}
-        return render(request, 'test_result.html', context)
 
+        # Sunrise match
+        match_sunrise = "The sunrise direction matches with the entered details." if amstans.sunrise == "east" else "The sunrise direction does not match the entered details."
+        if amstans.sunrise == "east":
+            amst_points += 1
+
+        # Prepare the context for rendering
+        context = {
+            'ans': amstans,
+            'match_message': match_message,
+            'time_message': match_time,
+            'year_message': match_year,
+            'dob_message': match_dob,
+            'ww1_message': match_ww1,
+            'count_message': match_count_backwards,
+            'address_message': match_address,
+            'sunrise_message': match_sunrise,
+            'points': amst_points
+        }
+        return render(request, 'test_result.html', context)
         
 
 def test_taken(request):

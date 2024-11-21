@@ -6,56 +6,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Information</title>
     <style>
-        body {
-            background-color: #f0f2f5;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            background-color: #7f8c8d;
-            width: 500px;
-            margin: auto;
-            margin-top: 100px;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            color: white;
-        }
-        h2 {
-            text-align: center;
-            font-family: 'Times New Roman', Times, serif;
-        }
-        .form-group {
-            margin: 15px 0;
-        }
-        label {
-            display: block;
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-        #doctor_name,#additional_tests{
-            width: 100%;
-            padding: 8px;
-            border-radius: 5px;
-            border: none;
-            font-size: 16px;
-        }
+        /* General reset */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+}
 
-        button {
-            background-color: #2980b9;
-            color: white;
-            border: none;
-            padding: 10px;
-            width: 100%;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #1c5987;
-        }
-        .test{
-            margin: 0%;
-        }
+/* Container styling */
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* Heading styling */
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+    border-bottom: 2px solid #4caf50;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+/* Form group styling */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+/* Label styling */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #555;
+}
+
+/* Input fields styling */
+input[type="text"], textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus, textarea:focus {
+    border-color: #4caf50;
+    background: #ffffff;
+    outline: none;
+}
+
+/* Radio buttons styling */
+input[type="radio"] {
+    margin-right: 8px;
+    transform: scale(1.2);
+}
+
+/* Textarea styling */
+textarea {
+    resize: none;
+}
+
+/* Submit button styling */
+button {
+    background-color: #4caf50;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px 20px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+}
+
     </style>
 </head>
 <body>
