@@ -6,54 +6,128 @@
     <title>Online Patient Assessment</title>
     <style>
         body {
-            background-color: #eef2f3;
-            font-family: Arial, sans-serif;
+            background-color: #f7f9fc; /* Subtle light blue background */
+            font-family: 'Roboto', Arial, sans-serif; /* Modern font */
+            margin: 0;
+            padding: 0;
         }
+        
         .container {
             max-width: 800px;
-            margin: auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 100px auto; /* Adjusted for better positioning */
+            padding: 30px;
+            background-color: #ffffff; /* Clean white container */
+            border-radius: 15px; /* Softer rounded corners */
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1); /* Enhanced shadow */
         }
+        
         h2 {
             text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
+            margin-bottom: 30px;
+            color: #2c3e50; /* Dark blue-gray color */
+            font-size: 28px; /* Slightly larger for prominence */
             font-weight: bold;
         }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e; /* Darker text color for readability */
+        }
+        
         input, select, textarea {
             width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+            padding: 12px 15px;
+            border-radius: 8px; /* Softer input field edges */
+            border: 1px solid #ced6e0; /* Subtle border color */
+            font-size: 16px; /* Comfortable font size */
+            background-color: #f9fafb; /* Light background for inputs */
+            color: #2f3640; /* Dark text for inputs */
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: #3498db; /* Highlight on focus */
+            box-shadow: 0px 0px 5px rgba(52, 152, 219, 0.5); /* Glow effect */
+            outline: none;
+        }
+        
         button {
-            background-color: #3498db;
-            color: white;
+            background-color: #2980b9; /* Professional blue button */
+            color: #ffffff;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 25px;
             font-size: 16px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
+        
         button:hover {
-            background-color: #217dbb;
+            background-color: #1f618d; /* Darker blue on hover */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); /* Slight lift on hover */
         }
+        
         .section-title {
-            font-size: 18px;
-            margin: 20px 0 10px;
-            color: #555;
-            text-decoration: underline;
+            font-size: 20px; /* Clear section headings */
+            margin: 20px 0 15px;
+            color: #34495e; /* Dark blue-gray for headings */
+            border-bottom: 2px solid #3498db; /* Underline for emphasis */
+            padding-bottom: 5px;
         }
+        
+        .navigation {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        #prevBtn, #nextBtn, #submitBtn {
+            margin: 0 10px;
+        }
+        
+        .step {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .container {
+                margin: 50px 20px;
+                padding: 20px;
+            }
+        
+            button {
+                width: 100%; /* Full-width buttons on smaller screens */
+                margin-bottom: 10px;
+            }
+        
+            #prevBtn, #nextBtn {
+                margin: 0;
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -61,93 +135,139 @@
         <h2>Patient Online Assessment</h2>
         <form action="mmse_test" method="post">
             {% csrf_token %}
-
-            <div class="section-title">Orientation</div>
-
-            {% csrf_token %}
             <input type="hidden" id="test_name" name="test_name" value="Minimal Mental State Test(mmst)">
-        
-            {% csrf_token %}
             <input type="hidden" name="patient_name" value="{{patient_name }}">
-        
-            <div class="form-group">
-                <label for="year">What is the Year?</label>
-                <input type="text" id="year" name="year" placeholder="Enter the year" required>
-            </div>
-            <div class="form-group">
-                <label for="season">What is the Season?</label>
-                <input type="text" id="season" name="season" placeholder="Enter the season" required>
-            </div>
-            <div class="form-group">
-                <label for="day">What is the Day of the Week?</label>
-                <input type="text" id="day" name="day" placeholder="Enter the day of the week" required>
-            </div>
-            <div class="form-group">
-                <label for="month">What is the Month?</label>
-                <input type="text" id="month" name="month" placeholder="Enter the month" required>
-            </div>
-            <div class="form-group">
-                <label for="date">What is the Date?</label>
-                <input type="date" id="date" name="date" required>
+
+            <!-- Step 1 -->
+            <div class="step active">
+                <div class="section-title">Orientation</div>
+                <div class="form-group">
+                    <label for="year">What is the Year?</label>
+                    <input type="text" id="year" name="year" placeholder="Enter the year" required>
+                </div>
+                <div class="form-group">
+                    <label for="season">What is the Season?</label>
+                    <input type="text" id="season" name="season" placeholder="Enter the season" required>
+                </div>
+                <div class="form-group">
+                    <label for="day">What is the Day of the Week?</label>
+                    <input type="text" id="day" name="day" placeholder="Enter the day of the week" required>
+                </div>
+                <div class="form-group">
+                    <label for="month">What is the Month?</label>
+                    <input type="text" id="month" name="month" placeholder="Enter the month" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">What is the Date?</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
             </div>
 
-            <div class="section-title">Location</div>
-            <div class="form-group">
-                <label for="state">State</label>
-                <input type="text" id="state" name="state" placeholder="Enter the state" required>
-            </div>
-            <div class="form-group">
-                <label for="county">County</label>
-                <input type="text" id="county" name="county" placeholder="Enter the county" required>
-            </div>
-            <div class="form-group">
-                <label for="town">Town/City</label>
-                <input type="text" id="town" name="town" placeholder="Enter the town/city" required>
-            </div>
-            <div class="form-group">
-                <label for="hospital">Hospital</label>
-                <input type="text" id="hospital" name="hospital" placeholder="Enter the hospital name" required>
-            </div>
-            <div class="form-group">
-                <label for="floor">Floor</label>
-                <input type="text" id="floor" name="floor" placeholder="Enter the floor" required>
-            </div>
-
-            <div class="section-title">Memory Recall</div>
-            <div class="form-group">
-                <label for="memory">Name 3 unrelated objects(space separated) and remember them for later:</label>
-                <input type="text" id="memory" name="memory" placeholder="List 3 objects" required>
+            <!-- Step 2 -->
+            <div class="step">
+                <div class="section-title">Location</div>
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <input type="text" id="state" name="state" placeholder="Enter the state" required>
+                </div>
+                <div class="form-group">
+                    <label for="county">County</label>
+                    <input type="text" id="county" name="county" placeholder="Enter the county" required>
+                </div>
+                <div class="form-group">
+                    <label for="town">Town/City</label>
+                    <input type="text" id="town" name="town" placeholder="Enter the town/city" required>
+                </div>
+                <div class="form-group">
+                    <label for="hospital">Hospital</label>
+                    <input type="text" id="hospital" name="hospital" placeholder="Enter the hospital name" required>
+                </div>
+                <div class="form-group">
+                    <label for="floor">Floor</label>
+                    <input type="text" id="floor" name="floor" placeholder="Enter the floor" required>
+                </div>
             </div>
 
-            <div class="section-title">Counting</div>
-            <div class="form-group">
-                <label for="backward">Type your name backward:</label>
-                <input type="text" id="backward" name="backward" placeholder="Type your name backward" required>
+            <!-- Step 3 -->
+            <div class="step">
+                <div class="section-title">Memory Recall</div>
+                <div class="form-group">
+                    <label for="memory">Name 3 unrelated objects (space separated) and remember them for later:</label>
+                    <input type="text" id="memory" name="memory" placeholder="List 3 objects" required>
+                </div>
             </div>
 
-            <div class="section-title">Memory Recall (Later)</div>
-            <div class="form-group">
-                <label for="recall">Recall the 3 objects named earlier:</label>
-                <input type="text" id="recall" name="recall" placeholder="Recall the 3 objects" required>
+            <!-- Step 4 -->
+            <div class="step">
+                <div class="section-title">Counting</div>
+                <div class="form-group">
+                    <label for="backward">Type your name backward:</label>
+                    <input type="text" id="backward" name="backward" placeholder="Type your name backward" required>
+                </div>
             </div>
 
-            <div class="section-title">Object Naming</div>
-            <div class="form-group">
-                <label for="objects">Please write the name of those items outside this room ie waiting room</label>
-                <input type="text" id="objects" name="objects" placeholder="Name the objects shown" required>
+            <!-- Step 5 -->
+            <div class="step">
+                <div class="section-title">Memory Recall (Later)</div>
+                <div class="form-group">
+                    <label for="recall">Recall the 3 objects named earlier:</label>
+                    <input type="text" id="recall" name="recall" placeholder="Recall the 3 objects" required>
+                </div>
             </div>
 
-            <div class="section-title">Phrase Repetition</div>
-            <div class="form-group">
-                <label for="phrase">
-                    Type the given statement in backward direction  *without the letter 'a'*: <br> 
-                    <strong>"An apple everyday keeps the doctor away."</strong>
-                </label>
-                <input type="text" id="phrase" name="phrase" placeholder="Type the statement here" required>
+            <!-- Step 6 -->
+            <div class="step">
+                <div class="section-title">Object Naming</div>
+                <div class="form-group">
+                    <label for="objects">Please write the name of those items outside this room, i.e., waiting room:</label>
+                    <input type="text" id="objects" name="objects" placeholder="Name the objects shown" required>
+                </div>
             </div>
 
-            <button type="submit">Submit Assessment</button>
+            <!-- Step 7 -->
+            <div class="step">
+                <div class="section-title">Phrase Repetition</div>
+                <div class="form-group">
+                    <label for="phrase">
+                        Type the given statement backward *without the letter 'a'*: <br> 
+                        <strong>"An apple everyday keeps the doctor away."</strong>
+                    </label>
+                    <input type="text" id="phrase" name="phrase" placeholder="Type the statement here" required>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button type="button" id="prevBtn" onclick="changeStep(-1)" style="display:none;">Previous</button>
+                <button type="button" id="nextBtn" onclick="changeStep(1)">Next</button>
+                <button type="submit" id="submitBtn" style="display:none;">Submit Assessment</button>
+            </div>
         </form>
     </div>
+
+    <script>
+        let currentStep = 0;
+        const steps = document.querySelectorAll(".step");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const submitBtn = document.getElementById("submitBtn");
+
+        function showStep(index) {
+            steps.forEach((step, i) => {
+                step.classList.toggle("active", i === index);
+            });
+            prevBtn.style.display = index === 0 ? "none" : "inline-block";
+            nextBtn.style.display = index === steps.length - 1 ? "none" : "inline-block";
+            submitBtn.style.display = index === steps.length - 1 ? "inline-block" : "none";
+        }
+
+        function changeStep(direction) {
+            currentStep += direction;
+            if (currentStep < 0) currentStep = 0;
+            if (currentStep >= steps.length) currentStep = steps.length - 1;
+            showStep(currentStep);
+        }
+
+        showStep(currentStep);
+    </script>
 </body>
 </html>

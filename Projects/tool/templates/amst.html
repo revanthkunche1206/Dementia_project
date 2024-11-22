@@ -1,64 +1,222 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memory and Orientation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f5f7;
+            color: #333;
+        }
+        
+        .container {
+            position: relative;
+            padding-bottom: 80px; 
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background-color: #3498db;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        form {
+            padding: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        input[type="date"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #217dbb;
+        }
+        
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .form-step {
+            display: none;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        .form-buttons {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+        }
+        
+        #submitBtn {
+            background-color: #2ecc71;
+        }
+        
+        #submitBtn:hover {
+            background-color: #27ae60;
+        }
+        
+    </style>
 </head>
 <body>
-    <h2></h2>Abbreviated Mental State Test</h2>    
-    <form action="amst_test" method="post">
-        {% csrf_token %}
+    <div class="container">
+        <header>Abbreviated Mental State Test</header>
+        <form action="amst_test" method="post">
+            {% csrf_token %}
         <input type="hidden" id="test_name" name="test_name" value="Abbreviated Mental State Test(amst)">
-        
-        {% csrf_token %}
-        <input type="hidden" name="patient_name" value="{{patient_name }}">
-        
-        {% csrf_token %}
-        <label>1. What is your age?</label><br>
-        <input type="number" id="age" name="age" required><br><br>
-        
-        {% csrf_token %}
-        <label>2. What is the time to the nearest hour?</label><br>
-        <input type="text" id="time" name="time" required><br><br>
+        <input type="hidden" name="patient_name" value="{{ patient_name }}">
 
-        <label>3. Remember this address: 42 West Street. You will be asked to repeat it later.</label><br><br>
+        <!-- Step 1 -->
+        <div class="form-step active">
+            <label for="age">1. What is your age?</label><br>
+            <input type="number" id="age" name="age" required><br><br>
+        </div>
 
-        {% csrf_token %}
-        <label>4. What is the year?</label><br>
-        <input type="number" id="year" name="year" required><br><br>
+        <!-- Step 2 -->
+        <div class="form-step">
+            <label for="time">2. What is the time to the nearest hour?</label><br>
+            <input type="text" id="time" name="time" required><br><br>
+        </div>
 
-        {% csrf_token %}
-        <label>5. What is the name of the hospital or number of the residence where the patient is situated?</label><br>
-        <input type="text" id="location" name="location" required><br><br>
+        <!-- Step 3 -->
+        <div class="form-step">
+            <label>3. Remember this address: <strong>42 West Street</strong>. You will be asked to repeat it later.</label><br><br>
+        </div>
 
-        {% csrf_token %}
-        <label>6. Can you recognize two people (e.g., the doctor, nurse, or home help)?</label><br>
-        <input type="text" id="recognizePeople" name="recognizePeople" required><br><br>
+        <!-- Step 4 -->
+        <div class="form-step">
+            <label for="year">4. What is the year?</label><br>
+            <input type="number" id="year" name="year" required><br><br>
+        </div>
 
-        {% csrf_token %}
-        <label>7. What is your date of birth?</label><br>
-        <input type="date" id="dob" name="dob" required><br><br>
+        <!-- Step 5 -->
+        <div class="form-step">
+            <label for="location">5. What is the name of the hospital or number of the residence where the patient is situated?</label><br>
+            <input type="text" id="location" name="location" required><br><br>
+        </div>
 
-        {% csrf_token %}
-        <label>8. In what year did World War 1 begin?</label><br>
-        <input type="number" id="ww1" name="ww1" required><br><br>
+        <!-- Step 6 -->
+        <div class="form-step">
+            <label for="recognizePeople">6. Can you recognize two people (e.g., the doctor, nurse, or home help)?</label><br>
+            <input type="text" id="recognizePeople" name="recognizePeople" required><br><br>
+        </div>
 
-        {% csrf_token %}
-        <label>9.Where does the sun rise?</label><br>
-        <input type="text" id="sunrise" name="sunrise" required><br><br>
+        <!-- Step 7 -->
+        <div class="form-step">
+            <label for="dob">7. What is your date of birth?</label><br>
+            <input type="date" id="dob" name="dob" required><br><br>
+        </div>
 
-        {% csrf_token %}
-        <label>10. Enter the Numberbackwards from 20 down to 1(space separated)</label><br>
-        <input type="textarea" id="countBackwards" name="countBackwards" required><br><br>
+        <!-- Step 8 -->
+        <div class="form-step">
+            <label for="ww1">8. In what year did World War 1 begin?</label><br>
+            <input type="number" id="ww1" name="ww1" required><br><br>
+        </div>
 
-        {% csrf_token %}
-        <label>11.Now, repeat the address you were asked to remember.</label><br>
-        <input type="text" id="repeatAddress" name="repeatAddress" required><br><br>
+        <!-- Step 9 -->
+        <div class="form-step">
+            <label for="sunrise">9. Where does the sun rise?</label><br>
+            <input type="text" id="sunrise" name="sunrise" required><br><br>
+        </div>
 
-        <button type="submit">Submit</button>
+        <!-- Step 10 -->
+        <div class="form-step">
+            <label for="countBackwards">10. Enter the numbers backward from 20 down to 1 (space-separated):</label><br>
+            <input type="text" id="countBackwards" name="countBackwards" required><br><br>
+        </div>
+
+        <!-- Step 11 -->
+        <div class="form-step">
+            <label for="repeatAddress">11. Now, repeat the address you were asked to remember.</label><br>
+            <input type="text" id="repeatAddress" name="repeatAddress" required><br><br>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="form-buttons">
+            <button type="button" id="prevBtn" onclick="changeStep(-1)">Previous</button>
+            <button type="button" id="nextBtn" onclick="changeStep(1)">Next</button>
+            <button type="submit" id="submitBtn" style="display: none;">Submit</button>
+        </div>
     </form>
-</body>
 
+    </div>
+    <script>
+        let currentStep = 0;
+        const steps = document.querySelectorAll('.form-step');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function showStep(step) {
+            steps.forEach((el, index) => {
+                el.classList.toggle('active', index === step);
+            });
+            prevBtn.style.display = step === 0 ? 'none' : 'inline-block';
+            nextBtn.style.display = step === steps.length - 1 ? 'none' : 'inline-block';
+            submitBtn.style.display = step === steps.length - 1 ? 'inline-block' : 'none';
+        }
+
+        function changeStep(direction) {
+            currentStep += direction;
+            showStep(currentStep);
+        }
+
+        // Initialize the form with the first step visible
+        showStep(currentStep);
+    </script>
+</body>
 </html>
