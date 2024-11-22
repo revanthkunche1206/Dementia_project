@@ -7,107 +7,150 @@
     <title>Memory and Orientation Test</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f5f7;
-            color: #333;
+            background: linear-gradient(to bottom, #eef2f3, #8e9eab);
+            color: #444;
+            line-height: 1.6;
         }
         
         .container {
             position: relative;
-            padding-bottom: 80px; 
-            max-width: 600px;
+            max-width: 700px;
             margin: 50px auto;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
             overflow: hidden;
+            transition: transform 0.3s ease-in-out;
         }
         
         header {
-            background-color: #3498db;
-            color: #ffffff;
-            padding: 20px;
-            text-align: center;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            color: #2c3e50; /* A clean dark gray-blue for text */
+            border-bottom: 2px solid #3498db; /* Subtle bottom border for emphasis */
+            background-color: transparent;
         }
         
         form {
-            padding: 20px;
+            padding: 30px 20px;
         }
         
         label {
             display: block;
-            font-weight: bold;
+            font-weight: 600;
             margin-bottom: 8px;
-            color: #555;
+            color: #34495e;
+            font-size: 1rem;
         }
         
         input[type="text"],
         input[type="number"],
         input[type="date"] {
-            width: calc(100% - 22px);
-            padding: 10px;
+            width: 100%;
+            padding: 12px;
             margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             font-size: 1rem;
-            background-color: #f9f9f9;
-            transition: border-color 0.3s ease;
+            background-color: #fdfefe;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         
         input:focus {
             border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
             outline: none;
         }
         
         button {
-            padding: 10px 20px;
-            background-color: #3498db;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: bold;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
         
         button:hover {
-            background-color: #217dbb;
+            background-color: #2980b9;
+            transform: scale(1.05);
         }
         
         button:disabled {
-            background-color: #ccc;
+            background-color: #bdc3c7;
             cursor: not-allowed;
+        }
+        
+        #prevBtn {
+            background-color: #95a5a6;
+        }
+        
+        #nextBtn {
+            background-color: #3498db;
+        }
+        
+        #submitBtn {
+            background-color: #27ae60;
+        }
+        
+        #submitBtn:hover {
+            background-color: #1e8449;
         }
         
         .form-step {
             display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
         
         .form-step.active {
             display: block;
+            opacity: 1;
         }
         
         .form-buttons {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
             justify-content: center;
             gap: 20px;
-            width: 100%;
+            position: relative;
+            margin-top: 30px;
+            align-items: center;
+            width: 100%; 
         }
-        
-        #submitBtn {
-            background-color: #2ecc71;
-        }
-        
-        #submitBtn:hover {
+        button[type="submit"] {
+            margin-left: 20px; /* Space between the submit and next button */
             background-color: #27ae60;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #1e8449;
+        }
+        
+       
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+        
+            header {
+                font-size: 1.5rem;
+            }
+        
+            button {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
         }
         
     </style>
@@ -123,13 +166,13 @@
         <!-- Step 1 -->
         <div class="form-step active">
             <label for="age">1. What is your age?</label><br>
-            <input type="number" id="age" name="age" required><br><br>
+            <input type="number" id="age" name="age" placeholder="Enter your age" required><br><br>
         </div>
 
         <!-- Step 2 -->
         <div class="form-step">
             <label for="time">2. What is the time to the nearest hour?</label><br>
-            <input type="text" id="time" name="time" required><br><br>
+            <input type="text" id="time" name="time" placeholder="e.g., 3 PM" required><br><br>
         </div>
 
         <!-- Step 3 -->
@@ -140,19 +183,19 @@
         <!-- Step 4 -->
         <div class="form-step">
             <label for="year">4. What is the year?</label><br>
-            <input type="number" id="year" name="year" required><br><br>
+            <input type="number" id="year" name="year" placeholder="Enter the current year" required><br><br>
         </div>
 
         <!-- Step 5 -->
         <div class="form-step">
             <label for="location">5. What is the name of the hospital or number of the residence where the patient is situated?</label><br>
-            <input type="text" id="location" name="location" required><br><br>
+            <input type="text" id="location" name="location" placeholder="Enter the hospital or residence name" required><br><br>
         </div>
 
         <!-- Step 6 -->
         <div class="form-step">
             <label for="recognizePeople">6. Can you recognize two people (e.g., the doctor, nurse, or home help)?</label><br>
-            <input type="text" id="recognizePeople" name="recognizePeople" required><br><br>
+            <input type="text" id="recognizePeople" name="recognizePeople" placeholder="Yes or No" required><br><br>
         </div>
 
         <!-- Step 7 -->
@@ -164,25 +207,25 @@
         <!-- Step 8 -->
         <div class="form-step">
             <label for="ww1">8. In what year did World War 1 begin?</label><br>
-            <input type="number" id="ww1" name="ww1" required><br><br>
+            <input type="number" id="ww1" name="ww1" placeholder="Enter the year (e.g., 1914)" required><br><br>
         </div>
 
         <!-- Step 9 -->
         <div class="form-step">
             <label for="sunrise">9. Where does the sun rise?</label><br>
-            <input type="text" id="sunrise" name="sunrise" required><br><br>
+            <input type="text" id="sunrise" name="sunrise" placeholder="e.g., The East" required><br><br>
         </div>
 
         <!-- Step 10 -->
         <div class="form-step">
             <label for="countBackwards">10. Enter the numbers backward from 20 down to 1 (space-separated):</label><br>
-            <input type="text" id="countBackwards" name="countBackwards" required><br><br>
+            <input type="text" id="countBackwards" name="countBackwards" placeholder="20 19 18 ... 1" required><br><br>
         </div>
 
         <!-- Step 11 -->
         <div class="form-step">
             <label for="repeatAddress">11. Now, repeat the address you were asked to remember.</label><br>
-            <input type="text" id="repeatAddress" name="repeatAddress" required><br><br>
+            <input type="text" id="repeatAddress" name="repeatAddress" placeholder="Enter the address" required><br><br>
         </div>
 
         <!-- Navigation Buttons -->
@@ -210,12 +253,11 @@
             submitBtn.style.display = step === steps.length - 1 ? 'inline-block' : 'none';
         }
 
-        function changeStep(direction) {
-            currentStep += direction;
+        function changeStep(stepChange) {
+            currentStep += stepChange;
             showStep(currentStep);
         }
 
-        // Initialize the form with the first step visible
         showStep(currentStep);
     </script>
 </body>
