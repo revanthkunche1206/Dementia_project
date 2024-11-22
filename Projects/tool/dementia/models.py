@@ -1,20 +1,20 @@
 from django.db import models
-
+import uuid 
 # Create your models here.
 
 class Details(models.Model):
+    patient_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     patient_name = models.CharField(max_length=100)
     patient_dob = models.DateField()
     patient_age = models.IntegerField()
     date = models.DateField()
     mobile_num = models.CharField(max_length=15)
-    city = models.CharField(max_length=100) 
-    state = models.CharField(max_length=100)      
-    country = models.CharField(max_length=100)    
-
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.patient_name
+        return f"{self.patient_name} ({self.patient_id})"
 
 class Answers:
 

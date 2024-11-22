@@ -76,8 +76,9 @@ def checking(request):
 def mmse_test(request):
     if request.method == 'POST':
         mmse_points = 0
+        patient_name = request.POST.get('patient_name', '').strip()
+        patient_id = request.POST.get('patient_id', '').strip()
 
-        # Create and save the MMSE answers
         mmseans = MmseAnswers(
             test_name=request.POST.get('test_name', ''), 
             year=int(request.POST.get('year', '0')),
@@ -162,7 +163,8 @@ def mmse_test(request):
             mmse_points += 1
 
         try:
-            patient_details = Details.objects.get(patient_name=patient_name)
+            patient_details = get_object_or_404(Details, patient_name=patient_name, patient_id=patient_id)
+
             if mmseans.state == patient_details.state.lower():
                 print("state true")
                 mmse_points += 1
