@@ -135,6 +135,7 @@
         <h2>Patient Online Assessment</h2>
         <form action="mmse_test" method="post">
             {% csrf_token %}
+            <input type="hidden" name="patient_id" value="{{ patient_details.patient_id }}">
             <input type="hidden" id="test_name" name="test_name" value="Minimal Mental State Test(mmst)">
             <input type="hidden" name="patient_name" value="{{patient_name }}">
 
