@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,26 +7,26 @@
     <title>Online Patient Assessment</title>
     <style>
         body {
-            background-color: #f7f9fc; /* Subtle light blue background */
-            font-family: 'Roboto', Arial, sans-serif; /* Modern font */
+            background-color: #f7f9fc; 
+            font-family: 'Roboto', Arial, sans-serif; 
             margin: 0;
             padding: 0;
         }
         
         .container {
             max-width: 800px;
-            margin: 100px auto; /* Adjusted for better positioning */
+            margin: 100px auto; 
             padding: 30px;
-            background-color: #ffffff; /* Clean white container */
-            border-radius: 15px; /* Softer rounded corners */
-            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1); /* Enhanced shadow */
+            background-color: #ffffff; 
+            border-radius: 15px; 
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1); 
         }
         
         h2 {
             text-align: center;
             margin-bottom: 30px;
-            color: #2c3e50; /* Dark blue-gray color */
-            font-size: 28px; /* Slightly larger for prominence */
+            color: #2c3e50; 
+            font-size: 28px; 
             font-weight: bold;
         }
         
@@ -37,29 +38,29 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #34495e; /* Darker text color for readability */
+            color: #34495e; 
         }
         
         input, select, textarea {
             width: 100%;
             padding: 12px 15px;
-            border-radius: 8px; /* Softer input field edges */
-            border: 1px solid #ced6e0; /* Subtle border color */
-            font-size: 16px; /* Comfortable font size */
-            background-color: #f9fafb; /* Light background for inputs */
-            color: #2f3640; /* Dark text for inputs */
+            border-radius: 8px; 
+            border: 1px solid #ced6e0; 
+            font-size: 16px;
+            background-color: #f9fafb; 
+            color: #2f3640;
             box-sizing: border-box;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         
         input:focus, select:focus, textarea:focus {
-            border-color: #3498db; /* Highlight on focus */
-            box-shadow: 0px 0px 5px rgba(52, 152, 219, 0.5); /* Glow effect */
+            border-color: #3498db; 
+            box-shadow: 0px 0px 5px rgba(52, 152, 219, 0.5); 
             outline: none;
         }
         
         button {
-            background-color: #2980b9; /* Professional blue button */
+            background-color: #2980b9; 
             color: #ffffff;
             border: none;
             padding: 12px 25px;
@@ -70,15 +71,15 @@
         }
         
         button:hover {
-            background-color: #1f618d; /* Darker blue on hover */
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); /* Slight lift on hover */
+            background-color: #1f618d;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); 
         }
         
         .section-title {
-            font-size: 20px; /* Clear section headings */
+            font-size: 20px; 
             margin: 20px 0 15px;
-            color: #34495e; /* Dark blue-gray for headings */
-            border-bottom: 2px solid #3498db; /* Underline for emphasis */
+            color: #34495e;
+            border-bottom: 2px solid #3498db; 
             padding-bottom: 5px;
         }
         
@@ -111,7 +112,6 @@
             }
         }
         
-        /* Responsive design */
         @media (max-width: 600px) {
             .container {
                 margin: 50px 20px;
@@ -119,7 +119,7 @@
             }
         
             button {
-                width: 100%; /* Full-width buttons on smaller screens */
+                width: 100%; 
                 margin-bottom: 10px;
             }
         
@@ -127,19 +127,163 @@
                 margin: 0;
             }
         }
-        
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            width: 90%;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 0;
+            color: #666;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 45%;
+        }
+
+        .confirm-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .edit-btn {
+            background-color: #f44336;
+            color: white;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            width: 90%;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 0;
+            color: #666;
+        }
+
+        .verification-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .verification-group h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .radio-group {
+            margin-top: 10px;
+        }
+
+        .radio-group label {
+            margin-right: 20px;
+            display: inline-block;
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 5px;
+            width: auto;
+        }
+
+        .modal-footer {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .modal-footer button {
+            padding: 10px 20px;
+            margin-left: 10px;
+        }
+
+        .next-btn {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        .next-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Patient Online Assessment</h2>
-        <form action="mmse_test" method="post">
+        <form id="mainForm" action="mmse_test" method="POST">
             {% csrf_token %}
-            <input type="hidden" name="patient_id" value="{{ patient_details.patient_id }}">
+            <input type="hidden" name="patient_id" value="{{ patient_id }}">
             <input type="hidden" id="test_name" name="test_name" value="Minimal Mental State Test(mmst)">
-            <input type="hidden" name="patient_name" value="{{patient_name }}">
+            <input type="hidden" name="patient_name" value="{{ patient_name }}">            
 
-            <!-- Step 1 -->
             <div class="step active">
                 <div class="section-title">Orientation</div>
                 <div class="form-group">
@@ -164,7 +308,6 @@
                 </div>
             </div>
 
-            <!-- Step 2 -->
             <div class="step">
                 <div class="section-title">Location</div>
                 <div class="form-group">
@@ -189,7 +332,6 @@
                 </div>
             </div>
 
-            <!-- Step 3 -->
             <div class="step">
                 <div class="section-title">Memory Recall</div>
                 <div class="form-group">
@@ -198,7 +340,6 @@
                 </div>
             </div>
 
-            <!-- Step 4 -->
             <div class="step">
                 <div class="section-title">Counting</div>
                 <div class="form-group">
@@ -207,7 +348,6 @@
                 </div>
             </div>
 
-            <!-- Step 5 -->
             <div class="step">
                 <div class="section-title">Memory Recall (Later)</div>
                 <div class="form-group">
@@ -216,7 +356,6 @@
                 </div>
             </div>
 
-            <!-- Step 6 -->
             <div class="step">
                 <div class="section-title">Object Naming</div>
                 <div class="form-group">
@@ -225,12 +364,11 @@
                 </div>
             </div>
 
-            <!-- Step 7 -->
             <div class="step">
                 <div class="section-title">Phrase Repetition</div>
                 <div class="form-group">
                     <label for="phrase">
-                        Type the given statement backward *without the letter 'a'*: <br> 
+                        Type the given statement backward without the letter 'a': <br> 
                         <strong>"An apple everyday keeps the doctor away."</strong>
                     </label>
                     <input type="text" id="phrase" name="phrase" placeholder="Type the statement here" required>
@@ -239,36 +377,237 @@
 
             <div class="navigation">
                 <button type="button" id="prevBtn" onclick="changeStep(-1)" style="display:none;">Previous</button>
-                <button type="button" id="nextBtn" onclick="changeStep(1)">Next</button>
+                <button type="button" id="nextBtn" onclick="handleNextClick()">Next</button>
                 <button type="submit" id="submitBtn" style="display:none;">Submit Assessment</button>
             </div>
         </form>
     </div>
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Verify Your Information</h3>
+                <button type="button" class="close-button" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalContent">
+                <form id="verificationForm">
+                    <div class="verification-group">
+                        <h4>Is this your hospital? <span id="confirmHospital"></span></h4>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="hospitalVerification" value="yes" required> Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="hospitalVerification" value="no" required> No
+                            </label>
+                        </div>
+                    </div>
+    
+                    <div class="verification-group">
+                        <h4>Is this your floor number? <span id="confirmFloor"></span></h4>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="floorVerification" value="yes" required> Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="floorVerification" value="no" required> No
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="next-btn">Next</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
+
+    <div id="objectConfirmationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Verify Objects</h3>
+                <button type="button" class="close-button" onclick="closeObjectModal()">&times;</button>
+            </div>
+            <div id="objectModalContent">
+                <form id="objectVerificationForm">
+                    <div class="verification-group">
+                        <h4>Are these the correct objects you saw? <span id="confirmObjects"></span></h4>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="objectsVerification" value="yes" required> Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="objectsVerification" value="no" required> No
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="next-btn">Next</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
     <script>
-        let currentStep = 0;
-        const steps = document.querySelectorAll(".step");
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
-        const submitBtn = document.getElementById("submitBtn");
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentStep = 0;
+            const steps = document.querySelectorAll(".step");
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+            const submitBtn = document.getElementById("submitBtn");
+            const modal = document.getElementById("confirmationModal");
+            const objectModal = document.getElementById("objectConfirmationModal");
+            const form = document.getElementById("verificationForm");
+            const objectForm = document.getElementById("objectVerificationForm");
+            const mainForm = document.getElementById("mainForm");
+            function showStep(index) {
+                steps.forEach((step, i) => {
+                    step.classList.toggle("active", i === index);
+                });
+                prevBtn.style.display = index === 0 ? "none" : "inline-block";
+                nextBtn.style.display = index === steps.length - 1 ? "none" : "inline-block";
+                submitBtn.style.display = index === steps.length - 1 ? "inline-block" : "none";
+            }
 
-        function showStep(index) {
-            steps.forEach((step, i) => {
-                step.classList.toggle("active", i === index);
-            });
-            prevBtn.style.display = index === 0 ? "none" : "inline-block";
-            nextBtn.style.display = index === steps.length - 1 ? "none" : "inline-block";
-            submitBtn.style.display = index === steps.length - 1 ? "inline-block" : "none";
-        }
+            function handleNextClick() {
+                if (currentStep === 1) {
+                    showConfirmationModal();
+                } else if (currentStep === 5) {  // Object naming step
+                    showObjectConfirmationModal();
+                } else {
+                    changeStep(1);
+                }
+            }
 
-        function changeStep(direction) {
-            currentStep += direction;
-            if (currentStep < 0) currentStep = 0;
-            if (currentStep >= steps.length) currentStep = steps.length - 1;
+            function showObjectConfirmationModal() {
+                const objects = document.getElementById("objects")?.value;
+                
+                if (objects) {
+                    document.getElementById("confirmObjects").textContent = objects;
+                    objectModal.style.display = "block";
+                } else {
+                    alert("Please fill in the objects field.");
+                }
+            }
+
+            function closeObjectModal() {
+                objectModal.style.display = "none";
+            }
+
+            function handleObjectModalNext() {
+                const objectsVerification = document.querySelector('input[name="objectsVerification"]:checked')?.value;
+
+                if (!objectsVerification) {
+                    alert("Please complete the verification");
+                    return;
+                }
+
+                // Add hidden field to the main form
+                let objectsInput = mainForm.querySelector('input[name="objects_verified"]');
+
+                if (!objectsInput) {
+                    objectsInput = document.createElement('input');
+                    objectsInput.type = 'hidden';
+                    objectsInput.name = 'objects_verified';
+                    mainForm.appendChild(objectsInput);
+                }
+
+                objectsInput.value = objectsVerification;
+
+                closeObjectModal();
+                changeStep(1);
+            }
+        
+            function showConfirmationModal() {
+                const hospital = document.getElementById("hospital")?.value;
+                const floor = document.getElementById("floor")?.value;
+                
+                if (hospital && floor) {
+                    document.getElementById("confirmHospital").textContent = hospital;
+                    document.getElementById("confirmFloor").textContent = floor;
+                    modal.style.display = "block";
+                } else {
+                    alert("Please fill in both Hospital and Floor fields.");
+                }
+            }
+        
+            function closeModal() {
+                modal.style.display = "none";
+            }
+        
+            function handleModalNext() {
+                const hospitalVerification = document.querySelector('input[name="hospitalVerification"]:checked')?.value;
+                const floorVerification = document.querySelector('input[name="floorVerification"]:checked')?.value;
+        
+                if (!hospitalVerification || !floorVerification) {
+                    alert("Please complete all verifications");
+                    return;
+                }
+        
+                // Add hidden fields to the main form
+                let hospitalInput = mainForm.querySelector('input[name="hospital_verified"]');
+                let floorInput = mainForm.querySelector('input[name="floor_verified"]');
+        
+                if (!hospitalInput) {
+                    hospitalInput = document.createElement('input');
+                    hospitalInput.type = 'hidden';
+                    hospitalInput.name = 'hospital_verified';
+                    mainForm.appendChild(hospitalInput);
+                }
+        
+                if (!floorInput) {
+                    floorInput = document.createElement('input');
+                    floorInput.type = 'hidden';
+                    floorInput.name = 'floor_verified';
+                    mainForm.appendChild(floorInput);
+                }
+        
+                hospitalInput.value = hospitalVerification;
+                floorInput.value = floorVerification;
+        
+                closeModal();
+                currentStep = 2;
+                showStep(currentStep);
+            }
+        
+            function changeStep(direction) {
+                currentStep += direction;
+                currentStep = Math.max(0, Math.min(currentStep, steps.length - 1));
+                showStep(currentStep);
+            }
+        
+            // Event Listeners
+            if (nextBtn) nextBtn.addEventListener('click', handleNextClick);
+            if (prevBtn) prevBtn.addEventListener('click', () => changeStep(-1));
+            
+            // Update the form submission handling
+            if (form) {
+                form.onsubmit = function(e) {
+                    e.preventDefault();
+                    handleModalNext();
+                };
+            }
+
+            if (objectForm) {
+                objectForm.onsubmit = function(e) {
+                    e.preventDefault();
+                    handleObjectModalNext();
+                };
+            }
+        
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+                if (event.target === objectModal) {
+                    closeObjectModal();
+                }
+            };
+        
             showStep(currentStep);
-        }
-
-        showStep(currentStep);
+        });
     </script>
 </body>
 </html>
+

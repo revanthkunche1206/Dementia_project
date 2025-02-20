@@ -3,7 +3,7 @@ import uuid
 # Create your models here.
 
 class Details(models.Model):
-    patient_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    patient_id = models.BigAutoField(primary_key=True)
     patient_name = models.CharField(max_length=100)
     patient_dob = models.DateField()
     patient_age = models.IntegerField()

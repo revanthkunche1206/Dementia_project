@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMSE Test Results</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .patient-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .score-section {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .stage-info {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #fff3cd;
+            border-radius: 5px;
+            border-left: 5px solid #ffc107;
+        }
+
+        .answers-section {
+            margin-top: 20px;
+        }
+
+        .answer-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .correct {
+            color: #28a745;
+        }
+
+        .incorrect {
+            color: #dc3545;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .stage-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stage-normal { background-color: #28a745; }
+        .stage-mild { background-color: #ffc107; color: #000; }
+        .stage-moderate { background-color: #fd7e14; }
+        .stage-severe { background-color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AMST Test Results</h1>
+        </div>
+
+        <div class="patient-info">
+            <h2>Patient Information</h2>
+            <p><strong>Name:</strong> {{ patient_details.patient_name }}</p>
+            <p><strong>ID:</strong> {{ patient_details.patient_id }}</p>
+            <p><strong>Test Date:</strong> {{ date }}</p>
+        </div>
+
+        <div class="score-section">
+            <h2>Overall Score</h2>
+            <p class="score">{{ points }} / {{ max_points }}</p>
+            
+            {% if points == 10 or points == 11 %}
+                <div class="stage-badge stage-normal">Stage 1: Normal Cognition</div>
+            {% elif points >= 7 and points <= 9 %}
+                <div class="stage-badge stage-mild">Stage 2: Mild Cognitive Impairment</div>
+            {% elif points >= 4 and points <= 6 %}
+                <div class="stage-badge stage-moderate">Stage 3: Moderate Cognitive Impairment</div>
+            {% else %}
+                <div class="stage-badge stage-severe">Stage 4: Severe Cognitive Impairment</div>
+            {% endif %}
+        </div>
+
+        <div class="stage-info">
+            <h3>Stage Assessment</h3>
+            {% if points >= 10 and points <= 11 %}
+                <p><strong>Stage:</strong> Normal Cognition</p>
+                <p><strong>Signs:</strong> Patient demonstrates full cognitive functioning with correct responses to most or all questions. Shows good orientation to time and place, strong memory recall, and ability to perform complex mental tasks.</p>
+            {% elif points >= 7 and points <= 9 %}
+                <p><strong>Stage:</strong> Mild Cognitive Impairment</p>
+                <p><strong>Signs:</strong> Patient shows slight impairment but can function independently. May have some difficulty with memory recall and might need occasional reminders. Can perform most daily tasks with minimal assistance.</p>
+            {% elif points >= 4 and points <= 6 %}
+                <p><strong>Stage:</strong> Moderate Cognitive Impairment</p>
+                <p><strong>Signs:</strong> Patient shows notable difficulty with multiple questions and may need frequent reminders or assistance. Memory recall and orientation questions are often missed. Additional support may be needed for daily activities.</p>
+            {% else %}
+                <p><strong>Stage:</strong> Severe Cognitive Impairment</p>
+                <p><strong>Signs:</strong> Patient shows significant cognitive decline, struggling with basic orientation questions and fundamental tasks. Memory recall and language tasks are severely impaired. Requires substantial assistance with daily activities.</p>
+            {% endif %}
+        </div>    
+    </div>
+</body>
+</html>

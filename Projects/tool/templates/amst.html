@@ -149,113 +149,351 @@
                 font-size: 0.9rem;
             }
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+        
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .close-button:hover {
+            color: black;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .verification-group {
+            margin-bottom: 20px;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        
+        .modal-footer {
+            margin-top: 20px;
+            text-align: right;
+        }
+        
+        .next-btn {
+            padding: 8px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .next-btn:hover {
+            background-color: #45a049;
+        }
         
     </style>
 </head>
 <body>
     <div class="container">
         <header>Abbreviated Mental State Test</header>
-        <form action="amst_test" method="post">
+        <form id="mainForm" action="amst_test" method="post">
             {% csrf_token %}
-        <input type="hidden" id="test_name" name="test_name" value="Abbreviated Mental State Test(amst)">
-        <input type="hidden" name="patient_name" value="{{ patient_name }}">
-
-        <!-- Step 1 -->
-        <div class="form-step active">
-            <label for="age">1. What is your age?</label><br>
-            <input type="number" id="age" name="age" placeholder="Enter your age" required><br><br>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="form-step">
-            <label for="time">2. What is the time to the nearest hour?</label><br>
-            <input type="text" id="time" name="time" placeholder="e.g., 3 PM" required><br><br>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="form-step">
-            <label>3. Remember this address: <strong>42 West Street</strong>. You will be asked to repeat it later.</label><br><br>
-        </div>
-
-        <!-- Step 4 -->
-        <div class="form-step">
-            <label for="year">4. What is the year?</label><br>
-            <input type="number" id="year" name="year" placeholder="Enter the current year" required><br><br>
-        </div>
-
-        <!-- Step 5 -->
-        <div class="form-step">
-            <label for="location">5. What is the name of the hospital or number of the residence where the patient is situated?</label><br>
-            <input type="text" id="location" name="location" placeholder="Enter the hospital or residence name" required><br><br>
-        </div>
-
-        <!-- Step 6 -->
-        <div class="form-step">
-            <label for="recognizePeople">6. Can you recognize two people (e.g., the doctor, nurse, or home help)?</label><br>
-            <input type="text" id="recognizePeople" name="recognizePeople" placeholder="Yes or No" required><br><br>
-        </div>
-
-        <!-- Step 7 -->
-        <div class="form-step">
-            <label for="dob">7. What is your date of birth?</label><br>
-            <input type="date" id="dob" name="dob" required><br><br>
-        </div>
-
-        <!-- Step 8 -->
-        <div class="form-step">
-            <label for="ww1">8. In what year did World War 1 begin?</label><br>
-            <input type="number" id="ww1" name="ww1" placeholder="Enter the year (e.g., 1914)" required><br><br>
-        </div>
-
-        <!-- Step 9 -->
-        <div class="form-step">
-            <label for="sunrise">9. Where does the sun rise?</label><br>
-            <input type="text" id="sunrise" name="sunrise" placeholder="e.g., The East" required><br><br>
-        </div>
-
-        <!-- Step 10 -->
-        <div class="form-step">
-            <label for="countBackwards">10. Enter the numbers backward from 20 down to 1 (space-separated):</label><br>
-            <input type="text" id="countBackwards" name="countBackwards" placeholder="20 19 18 ... 1" required><br><br>
-        </div>
-
-        <!-- Step 11 -->
-        <div class="form-step">
-            <label for="repeatAddress">11. Now, repeat the address you were asked to remember.</label><br>
-            <input type="text" id="repeatAddress" name="repeatAddress" placeholder="Enter the address" required><br><br>
-        </div>
-
-        <!-- Navigation Buttons -->
-        <div class="form-buttons">
-            <button type="button" id="prevBtn" onclick="changeStep(-1)">Previous</button>
-            <button type="button" id="nextBtn" onclick="changeStep(1)">Next</button>
-            <button type="submit" id="submitBtn" style="display: none;">Submit</button>
-        </div>
-    </form>
-
+            <input type="hidden" id="test_name" name="test_name" value="Abbreviated Mental State Test(amst)">
+            <input type="hidden" name="patient_name" value="{{ patient_name }}">
+            <input type="hidden" name="patient_id" value="{{ patient_id }}">
+            
+            <!-- Step 1 -->
+            <div class="form-step active">
+                <label for="age">1. What is your age?</label><br>
+                <input type="number" id="age" name="age" placeholder="Enter your age" required><br><br>
+            </div>
+    
+            <!-- Step 2 -->
+            <div class="form-step">
+                <label for="time">2. What is the time to the nearest hour?</label><br>
+                <input type="text" id="time" name="time" placeholder="e.g., 3 PM" required><br><br>
+            </div>
+    
+            <!-- Step 3 -->
+            <div class="form-step">
+                <label>3. Remember this address: <strong>42 West Street</strong>. You will be asked to repeat it later.</label><br><br>
+            </div>
+    
+            <!-- Step 4 -->
+            <div class="form-step">
+                <label for="year">4. What is the year?</label><br>
+                <input type="number" id="year" name="year" placeholder="Enter the current year" required><br><br>
+            </div>
+    
+            <!-- Step 5 -->
+            <div class="form-step">
+                <label for="location">5. What is the name of the hospital or number of the residence where the patient is situated?</label><br>
+                <input type="text" id="location" name="location" placeholder="Enter the hospital or residence name" required><br><br>
+            </div>
+    
+            <!-- Step 6 -->
+            <div class="form-step">
+                <label for="recognizePeople">6. Can you recognize two people (e.g., the doctor, nurse, or home help)?</label><br>
+                <input type="text" id="recognizePeople" name="recognizePeople" placeholder="Yes or No" required><br><br>
+            </div>
+    
+            <!-- Step 7 -->
+            <div class="form-step">
+                <label for="dob">7. What is your date of birth?</label><br>
+                <input type="date" id="dob" name="dob" required><br><br>
+            </div>
+    
+            <!-- Step 8 -->
+            <div class="form-step">
+                <label for="ww1">8. In what year did World War 1 begin?</label><br>
+                <input type="number" id="ww1" name="ww1" placeholder="Enter the year (e.g., 1914)" required><br><br>
+            </div>
+    
+            <!-- Step 9 -->
+            <div class="form-step">
+                <label for="sunrise">9. Where does the sun rise?</label><br>
+                <input type="text" id="sunrise" name="sunrise" placeholder="e.g., The East" required><br><br>
+            </div>
+    
+            <!-- Step 10 -->
+            <div class="form-step">
+                <label for="countBackwards">10. Enter the numbers backward from 20 down to 1 (space-separated):</label><br>
+                <input type="text" id="countBackwards" name="countBackwards" placeholder="20 19 18 ... 1" required><br><br>
+            </div>
+    
+            <!-- Step 11 -->
+            <div class="form-step">
+                <label for="repeatAddress">11. Now, repeat the address you were asked to remember.</label><br>
+                <input type="text" id="repeatAddress" name="repeatAddress" placeholder="Enter the address" required><br><br>
+            </div>
+    
+            <!-- Navigation Buttons -->
+            <div class="form-buttons">
+                <button type="button" id="prevBtn">Previous</button>
+                <button type="button" id="nextBtn">Next</button>
+                <button type="submit" id="submitBtn" style="display: none;">Submit</button>
+            </div>
+        </form>
     </div>
+    
+    <!-- Hospital/Location Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Verify Your Information</h3>
+                <button type="button" class="close-button" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalContent">
+                <form id="verificationForm">
+                    <div class="verification-group">
+                        <h4>Is this the correct hospital/residence? <span id="confirmLocation"></span></h4>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="locationVerification" value="yes" required> Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="locationVerification" value="no" required> No
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="next-btn">Next</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- People Recognition Confirmation Modal -->
+    <div id="recognitionConfirmationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Verify Recognition</h3>
+                <button type="button" class="close-button" onclick="closeRecognitionModal()">&times;</button>
+            </div>
+            <div id="recognitionModalContent">
+                <form id="recognitionVerificationForm">
+                    <div class="verification-group">
+                        <h4>You said: <span id="confirmRecognition"></span></h4>
+                        <p>Are you confident about your answer?</p>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="recognitionVerification" value="yes" required> Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="recognitionVerification" value="no" required> No
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="next-btn">Next</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
     <script>
-        let currentStep = 0;
-        const steps = document.querySelectorAll('.form-step');
-        const nextBtn = document.getElementById('nextBtn');
-        const prevBtn = document.getElementById('prevBtn');
-        const submitBtn = document.getElementById('submitBtn');
-
-        function showStep(step) {
-            steps.forEach((el, index) => {
-                el.classList.toggle('active', index === step);
-            });
-            prevBtn.style.display = step === 0 ? 'none' : 'inline-block';
-            nextBtn.style.display = step === steps.length - 1 ? 'none' : 'inline-block';
-            submitBtn.style.display = step === steps.length - 1 ? 'inline-block' : 'none';
-        }
-
-        function changeStep(stepChange) {
-            currentStep += stepChange;
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentStep = 0;
+            const steps = document.querySelectorAll('.form-step');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const modal = document.getElementById('confirmationModal');
+            const recognitionModal = document.getElementById('recognitionConfirmationModal');
+            const verificationForm = document.getElementById('verificationForm');
+            const recognitionForm = document.getElementById('recognitionVerificationForm');
+            const mainForm = document.getElementById('mainForm');
+    
+            function showStep(step) {
+                steps.forEach((el, index) => {
+                    el.classList.toggle('active', index === step);
+                });
+                prevBtn.style.display = step === 0 ? 'none' : 'inline-block';
+                nextBtn.style.display = step === steps.length - 1 ? 'none' : 'inline-block';
+                submitBtn.style.display = step === steps.length - 1 ? 'inline-block' : 'none';
+            }
+    
+            function handleNextClick() {
+                if (currentStep === 4) { // After question 5 (location)
+                    const location = document.getElementById('location').value;
+                    if (location) {
+                        document.getElementById('confirmLocation').textContent = location;
+                        modal.style.display = 'block';
+                    } else {
+                        alert('Please fill in the hospital/residence field.');
+                    }
+                } else if (currentStep === 5) { // After question 6 (recognize people)
+                    const recognition = document.getElementById('recognizePeople').value;
+                    if (recognition) {
+                        document.getElementById('confirmRecognition').textContent = recognition;
+                        recognitionModal.style.display = 'block';
+                    } else {
+                        alert('Please answer the recognition question.');
+                    }
+                } else {
+                    changeStep(1);
+                }
+            }
+    
+            function closeModal() {
+                modal.style.display = 'none';
+            }
+    
+            function closeRecognitionModal() {
+                recognitionModal.style.display = 'none';
+            }
+    
+            function handleModalNext(e) {
+                e.preventDefault();
+                const locationVerification = document.querySelector('input[name="locationVerification"]:checked')?.value;
+    
+                if (!locationVerification) {
+                    alert('Please complete the verification');
+                    return;
+                }
+    
+                // Add hidden field to the main form
+                let locationInput = mainForm.querySelector('input[name="location_verified"]');
+    
+                if (!locationInput) {
+                    locationInput = document.createElement('input');
+                    locationInput.type = 'hidden';
+                    locationInput.name = 'location_verified';
+                    mainForm.appendChild(locationInput);
+                }
+    
+                locationInput.value = locationVerification;
+    
+                closeModal();
+                changeStep(1);
+            }
+    
+            function handleRecognitionModalNext(e) {
+                e.preventDefault();
+                const recognitionVerification = document.querySelector('input[name="recognitionVerification"]:checked')?.value;
+    
+                if (!recognitionVerification) {
+                    alert('Please complete the verification');
+                    return;
+                }
+    
+                // Add hidden field to the main form
+                let recognitionInput = mainForm.querySelector('input[name="recognition_verified"]');
+    
+                if (!recognitionInput) {
+                    recognitionInput = document.createElement('input');
+                    recognitionInput.type = 'hidden';
+                    recognitionInput.name = 'recognition_verified';
+                    mainForm.appendChild(recognitionInput);
+                }
+    
+                recognitionInput.value = recognitionVerification;
+    
+                closeRecognitionModal();
+                changeStep(1);
+            }
+    
+            function changeStep(stepChange) {
+                currentStep += stepChange;
+                currentStep = Math.max(0, Math.min(currentStep, steps.length - 1));
+                showStep(currentStep);
+            }
+    
+            // Event Listeners
+            nextBtn.addEventListener('click', handleNextClick);
+            prevBtn.addEventListener('click', () => changeStep(-1));
+            
+            // Form submission handling
+            verificationForm.addEventListener('submit', handleModalNext);
+            recognitionForm.addEventListener('submit', handleRecognitionModalNext);
+    
+            // Close modal when clicking outside
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+                if (event.target === recognitionModal) {
+                    closeRecognitionModal();
+                }
+            };
+    
+            // Close buttons in modals
+            document.querySelector('.close-button').addEventListener('click', closeModal);
+            document.querySelectorAll('.close-button')[1].addEventListener('click', closeRecognitionModal);
+    
             showStep(currentStep);
-        }
-
-        showStep(currentStep);
+        });
     </script>
 </body>
 </html>

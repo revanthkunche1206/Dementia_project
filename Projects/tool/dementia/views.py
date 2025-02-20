@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+import json
+import uuid
 from django.urls import reverse
 from .models import Details
 from .models import Answers
@@ -9,7 +12,6 @@ from django.http import HttpResponseBadRequest
 from datetime import datetime
 from django.shortcuts import get_object_or_404
 
-# Create your views here.
 def home(request):
     return render(request,'home.html')
 
@@ -27,6 +29,8 @@ def questions(request):
     )
     
     details.save()
+
+    print("patient_id=",details.patient_id)
     return render(request,'tests.html' , {'patient_details' : details })
 
 def checking(request):
@@ -79,6 +83,9 @@ def mmse_test(request):
         patient_name = request.POST.get('patient_name', '').strip()
         patient_id = request.POST.get('patient_id', '').strip()
 
+        print("id=",patient_id)
+
+
         mmseans = MmseAnswers(
             test_name=request.POST.get('test_name', ''), 
             year=int(request.POST.get('year', '0')),
@@ -108,7 +115,8 @@ def mmse_test(request):
         current_date=str(current_year)+"-"+str(month)+"-"+str(date)
         patient_name = request.POST.get('patient_name', '')
 
-        # Check day, year, month, date correctness
+        
+
         if mmseans.day == current_day:
             print("day true")
             mmse_points += 1
@@ -123,11 +131,11 @@ def mmse_test(request):
 
         print(current_date)
         print(mmseans.date)
+        ##this on not working
         if mmseans.date == current_date:
             print("date true")
             mmse_points += 1
 
-        # Calculate current season
         month_to_number = {
             "January": 1, "February": 2, "March": 3, "April": 4, "May": 5,
             "June": 6, "July": 7, "August": 8, "September": 9, "October": 10,
@@ -154,13 +162,41 @@ def mmse_test(request):
         if patient_name[::-1].lower() == mmseans.name_backward:
             print("name back true")
             mmse_points += 1
-
+        
         objects = sorted(mmseans.memory.split())
         recall_obj = sorted(mmseans.recall.split())
 
+        if objects:
+            print("obj true")
+            mmse_points+=3
+
         if objects == recall_obj:
+            print("recall true")
             print("memory recall true")
+            mmse_points += 3
+
+        hospital_verified = request.POST.get('hospital_verified')
+        floor_verified = request.POST.get('floor_verified')
+        
+        print(f"Hospital verified: {hospital_verified}") 
+        print(f"Floor verified: {floor_verified}")
+        if hospital_verified == 'yes' and floor_verified == 'yes':
+            mmse_points += 2
+            print("Added 2 points for both verified")  
+        elif hospital_verified == 'yes' or floor_verified == 'yes':
             mmse_points += 1
+            print("Added 1 point for one verified")
+
+        if mmseans.phrase=="n pple everydy keeps the doctor wy":
+            print("phrase true")
+            mmse_points+=3
+
+
+        objects_verified = request.POST.get('objects_verified')
+        print(f"Objects verified: {objects_verified}")  
+        if objects_verified == 'yes':
+            mmse_points += 1
+            print("Added 1 point for objects verified")
 
         try:
             patient_details = get_object_or_404(Details, patient_name=patient_name, patient_id=patient_id)
@@ -176,8 +212,8 @@ def mmse_test(request):
                 mmse_points += 1
         except Details.DoesNotExist:
             print("Patient details not found")
-
-        return render(request, 'test_result.html', {"ans": mmseans, "points": mmse_points})
+        check_list=[current_date,current_day,current_month,current_year,current_season]
+        return render(request, 'test_result_mmse.html', {"check_list":check_list,"patient_details":patient_details,"max_points":20,"patient_name":patient_name,"patient_id":patient_id,"date":current_date,"ans": mmseans, "points": mmse_points})
 
     
 def amst_test(request):
@@ -197,85 +233,62 @@ def amst_test(request):
         )
         amstans.save()
 
-        # Initialize variables
         current_hour = datetime.now().hour
         current_year = datetime.now().year
-        patient_name = request.POST.get('patient_name')
-        match_message = "No patient details found."
-        amst_points = 0
 
-        # Retrieve patient details if provided
+        current_year = datetime.now().year
+        month=datetime.now().month
+        date = datetime.now().day
+        current_date=str(current_year)+"-"+str(month)+"-"+str(date)
+        patient_name = request.POST.get('patient_name')
+        amst_points = 0
+        patient_id = request.POST.get('patient_id')
         patient_details = None
+        
         if patient_name:
             try:
-                patient_details = Details.objects.get(patient_name=patient_name)
+                patient_details = get_object_or_404(Details, patient_name=patient_name, patient_id=patient_id)
                 if amstans.age == patient_details.patient_age:
-                    amst_points += 1
-                    match_message = "The age matches with the entered details."
-                else:
-                    match_message = "The age does not match the entered details."
+                    amst_points += 1               
             except Details.DoesNotExist:
                 pass
 
-        # Time match
-        match_time = "The time matches with the current time." if amstans.time == current_hour else "The time does not match the current time."
+        location_verified = request.POST.get('location_verified')
+        if location_verified == 'yes':
+            amst_points += 1
+
+        recognition_verified = request.POST.get('recognition_verified')
+        if amstans.recognize_people.lower() == 'yes' and recognition_verified == 'yes':
+            amst_points += 1
+
         if amstans.time == current_hour:
             amst_points += 1
 
-        # Year match
-        match_year = "The year matches with the current year." if amstans.year == current_year else "The year does not match the current year."
         if amstans.year == current_year:
             amst_points += 1
 
-        # DOB match
         print(amstans.dob)
         print(patient_details.patient_dob)
         if amstans.dob == str(patient_details.patient_dob):
             amst_points += 1
-            match_dob = "The date of birth matches with the entered details."
-        else:
-            match_dob = "The date of birth does not match the entered details."
-
-        # WW1 match
-        match_ww1 = "The year of WW1 matches with the entered details." if amstans.ww1 == 1914 else "The year of WW1 does not match the entered details."
+        
         if amstans.ww1 == 1914:
             amst_points += 1
 
-        # Count backwards match
         correct_count = "20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1"
-        match_count_backwards = "The count backwards matches with the entered details." if amstans.count_backwards == correct_count else "The count backwards does not match the entered details."
         if amstans.count_backwards == correct_count:
             amst_points += 1
 
-        # Repeat address match
-        sanitized_address = "".join(amstans.repeat_address.split())  # Remove spaces
+        sanitized_address = "".join(amstans.repeat_address.split()) 
         if sanitized_address == "42weststreet":
-            amst_points += 1
-            match_address = "The address matches with the entered details."
-        else:
-            match_address = "The address does not match the entered details."
-
-        # Sunrise match
-        match_sunrise = "The sunrise direction matches with the entered details." if amstans.sunrise == "east" else "The sunrise direction does not match the entered details."
+            amst_points += 2
+        
         if amstans.sunrise == "east":
             amst_points += 1
 
-        # Prepare the context for rendering
-        context = {
-            'ans': amstans,
-            'match_message': match_message,
-            'time_message': match_time,
-            'year_message': match_year,
-            'dob_message': match_dob,
-            'ww1_message': match_ww1,
-            'count_message': match_count_backwards,
-            'address_message': match_address,
-            'sunrise_message': match_sunrise,
-            'points': amst_points
-        }
-        return render(request, 'test_result.html', context)
-        
-
+        return render(request, 'test_result_amst.html', {"date":current_date,"patient_details": patient_details, "max_points": 11, "points": amst_points})
+    
+    
 def test_taken(request):
     doctor_details = DoctorInfo(
         doctor_name=request.POST.get('doctor_name'),
@@ -284,12 +297,14 @@ def test_taken(request):
     )
     doctor_details.save()
 
-    patient_name = request.POST.get('patient_name') 
+    patient_name = request.POST.get('patient_name')
+    patient_id = request.POST.get('patient_id')
+
     flag = request.POST.get('test') 
     if flag == 'mmse': 
-        return render(request, 'mmse.html', {'doctor_details': doctor_details,'patient_name': patient_name})
+        return render(request, 'mmse.html', {'doctor_details': doctor_details,'patient_name': patient_name,'patient_id': patient_id})
     elif flag == "amst":
-        return render(request, 'amst.html', {'doctor_details': doctor_details,'patient_name': patient_name})
+        return render(request, 'amst.html', {'doctor_details': doctor_details,'patient_name': patient_name,'patient_id': patient_id})
     else:
         return HttpResponseBadRequest("Invalid test type provided.")
     
